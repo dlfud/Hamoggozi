@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="hamoggozi.main:war">
+    <output-path>$PROJECT_DIR$/../../../out/hamoggozi/artifacts/hamoggozi_main_war</output-path>
+    <root id="archive" name="hamoggozi.main_war.war">
+      <element id="artifact" artifact-name="hamoggozi.main:war exploded" />
+    </root>
+  </artifact>
+</component>
