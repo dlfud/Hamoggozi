@@ -7,6 +7,14 @@
 - react
 - nodejs
 
+springboot 세팅
+- Spring Boot Dev Tools
+- Lombok
+- Spring Web
+- Spring Data JPA
+- Spring Security
+- MySQL Driver
+
 
 2025-02-02 (일)
 - mysql user 생성 및 hamo DB생성
