@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OneLineDiaryService{
+public class OneLineDiaryService implements OneLineDiaryServiceI{
     @Autowired
     private OneLineDiaryDao oneLineDiaryDao;
 
-    public List<OneLineDiaryBean> getOneLineDiaryList(){
+    @Override
+    public List<OneLineDiaryBean> getOneLineDiaryList() {
+        System.out.println(oneLineDiaryDao.getOneLineDiaryList());
         return oneLineDiaryDao.getOneLineDiaryList();
     }
 }

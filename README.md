@@ -14,6 +14,7 @@ springboot 세팅
 - Spring Data JPA
 - Spring Security
 - MySQL Driver
+- Mybatis
 
 
 2025-02-02 (일)

@@ -1,7 +1,7 @@
 package com.hamoggozi.hamoggozi.oneLineDiary.controller;
 
 import com.hamoggozi.hamoggozi.dto.OneLineDiaryBean;
-import com.hamoggozi.hamoggozi.oneLineDiary.service.OneLineDiaryService;
+import com.hamoggozi.hamoggozi.oneLineDiary.service.OneLineDiaryServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +13,7 @@ import java.util.List;
 public class OneLineDiaryController {
 
     @Autowired
-    private OneLineDiaryService oneLineDiaryService;
+    private OneLineDiaryServiceI oneLineDiaryService;
 
     @RequestMapping(value="/service/getOneLineDiaryList", method= RequestMethod.POST)
     public List<OneLineDiaryBean> getOneLineDiaryList() throws Exception{
