@@ -15,7 +15,7 @@ public class OneLineDiaryController {
     @Autowired
     private OneLineDiaryServiceI oneLineDiaryService;
 
-    @RequestMapping(value="/service/getOneLineDiaryList", method= RequestMethod.POST)
+    @RequestMapping(value="/diary/getOneLineDiaryList", method= RequestMethod.GET)
     public List<OneLineDiaryBean> getOneLineDiaryList() throws Exception{
         return oneLineDiaryService.getOneLineDiaryList();
     }

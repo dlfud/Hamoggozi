@@ -17,6 +17,11 @@ springboot 세팅
 - Mybatis
 
 
+2025-02-09(일)
+- 데이터 갖고 오는지 테스트 완료
+- post로 데이터 보내기 완료
+
+
 2025-02-07(금)
 - mybatis의존성 추가 implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
     (MyBatis는 SQL을 XML 파일로 따로 관리)

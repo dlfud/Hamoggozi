@@ -17,6 +17,10 @@ public class OneLineDiaryBean {
     private String content;
     @Column(name="useruid")
     private int userUid;
+    @Column(name="insertdate")
+    private String insertDate;
+    @Column(name="updatedate")
+    private String updateDate;
 
     public int getUid() {
         return uid;
@@ -37,5 +41,19 @@ public class OneLineDiaryBean {
     }
     public void setUserUid(int userUid) {
         this.userUid = userUid;
+    }
+
+    public String getInsertDate() {
+        return insertDate;
+    }
+    public void setInsertDate(String insertDate) {
+        this.insertDate = insertDate;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
     }
 }
