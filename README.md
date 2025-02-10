@@ -16,6 +16,11 @@ springboot 세팅
 - MySQL Driver
 - Mybatis
 
+2025-02-10(월)
+- JWT의존성 주입
+- config 세팅 버전 오류 참고 https://jypark1111.tistory.com/192
+- jwtUtil, jwtFilter, securityConfig추가
+
 
 2025-02-09(일)
 - 데이터 갖고 오는지 테스트 완료

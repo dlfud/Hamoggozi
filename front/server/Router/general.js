@@ -10,8 +10,9 @@ router.get("/", (req, res) => {
 //login
 router.post("/login", (req, res) => {
   let user = { ...req.body };
+  console.log(user)
 
-  const boardWriteAPI = {
+  const login = {
     url: "http://localhost:8080/login",
     method: "POST",
     body: {
@@ -21,8 +22,8 @@ router.post("/login", (req, res) => {
     json: true,
   };
 
-  request(boardWriteAPI, function (err, response, body) {
-    console.log(body)
+  request(login, function (err, response, body) {
+    console.log("body: ", body)
     if (body == "success") {
       res.json({
         msg: "success",

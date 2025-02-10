@@ -6,11 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GeneralDao extends JpaRepository<UserBean, Integer> {
-//    @Query(name = "OneLineDiaryBean.getOneLineDiaryList", nativeQuery = true)
-//    List<OneLineDiaryBean> getOneLineDiaryList();
+
+    @Query(name="UserBean.getUser", nativeQuery = true)
+    Optional<UserBean> getUser(String id);
 
 
 }

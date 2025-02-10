@@ -11,6 +11,7 @@ spring:
   jpa:
     mapping-resources:
       - classpath:jpa/OneLineDiary.xml
+      - classpath:jpa/General.xml
     properties:
       hibernate:
         show_sql: true

@@ -3,11 +3,12 @@
                  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
                  version="2.2">
 
-    <named-native-query name="UserBean.login"
-                        result-class="com.hamoggozi.hamoggozi.dto.OneLineDiaryBean">
+    <named-native-query name="UserBean.getUser"
+                        result-class="com.hamoggozi.hamoggozi.dto.UserBean">
         <query>
-            SELECT OD.uid, OD.content, OD.userUid, OD.insertDate, OD.updateDate
-            FROM OneLineDiary OD
+            SELECT U.UID, U.ID, U.PW, U.NAME, U.PHONE, U.AUTH, U.INSERTDATE, U.UPDATEDATE
+            FROM USER U
+            WHERE U.ID = ?
         </query>
     </named-native-query>
 
