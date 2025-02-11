@@ -15,6 +15,17 @@ springboot 세팅
 - Spring Security
 - MySQL Driver
 - Mybatis
+- JWT
+
+
+
+
+2025-02-11(화)
+- jwt 사용 로그인 토큰 받아오기 성공
+- 공통 Bean 추가
+- Cors 설정 ->  React (http://localhost:3000)와 Spring Boot (http://localhost:8080)가 다른 도메인이라 CORS 필요!
+- JSESSIONID 사용 -> securityConfig 설정 추가, credentials: "include"로 react 쿠키 포함 추가
+
 
 2025-02-10(월)
 - JWT의존성 주입

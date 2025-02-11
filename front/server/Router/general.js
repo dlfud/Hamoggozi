@@ -10,11 +10,14 @@ router.get("/", (req, res) => {
 //login
 router.post("/login", (req, res) => {
   let user = { ...req.body };
-  console.log(user)
 
   const login = {
     url: "http://localhost:8080/login",
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // 쿠키 포함
     body: {
       id: user.id,
       pw: user.pw
@@ -24,7 +27,7 @@ router.post("/login", (req, res) => {
 
   request(login, function (err, response, body) {
     console.log("body: ", body)
-    if (body == "success") {
+    if (body.code == "200") {
       res.json({
         msg: "success",
       });
