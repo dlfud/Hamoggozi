@@ -15,9 +15,23 @@ springboot 세팅
 - Spring Security
 - MySQL Driver
 - Mybatis
-- JWT
+- JWT 사용
 
 
+- react login, logout 구현
+
+
+2025-07-04(금)
+- JWT, SpringSecurity, redis 사용 login, logout 구현 시도
+- route, ejs 사용 x -> react로 변경
+
+
+2025-02-16(일)
+- JSESSIONID 사용 x JWT로만 login, logout구현 시도
+
+
+2025-02-14(금)
+- logout 구현 실패
 
 
 2025-02-11(화)

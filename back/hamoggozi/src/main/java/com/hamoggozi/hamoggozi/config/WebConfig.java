@@ -6,18 +6,17 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class CorsConfig {
-
+public class WebConfig {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // 모든 요청에 대해 CORS 허용
-                        .allowedOrigins("http://localhost:3000") // React 서버 주소
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowCredentials(true) // ✅ 쿠키 허용!
-                        .allowedHeaders("*");
+                registry.addMapping("/**") // 모든 경로
+                        .allowedOrigins("http://localhost:3000") // React 주소
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true); // 쿠키 포함하려면 true
             }
         };
     }

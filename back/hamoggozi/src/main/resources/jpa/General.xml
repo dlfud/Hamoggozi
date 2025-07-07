@@ -3,6 +3,14 @@
                  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
                  version="2.2">
 
+    <named-native-query name="UserBean.join"
+                        result-class="com.hamoggozi.hamoggozi.dto.UserBean">
+        <query>
+            INSERT USER (ID, PW)
+            VALUES (?, ?)
+        </query>
+    </named-native-query>
+
     <named-native-query name="UserBean.getUser"
                         result-class="com.hamoggozi.hamoggozi.dto.UserBean">
         <query>

@@ -3,6 +3,10 @@
 server:
   port: 8080
 spring:
+  data:
+    redis:
+      host: localhost
+      port: 8080
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/hamo?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
@@ -24,6 +28,7 @@ spring:
       - classpath:mybatis/*.xml
 logging:
   level:
+    org.springframework.security: DEBUG
     org:
       hibernate:
         type:
