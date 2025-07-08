@@ -12,13 +12,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    private GeneralDao generalDao;
+
+    private final GeneralDao generalDao;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserBean user = generalDao.getUser(username)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
+        UserBean user = generalDao.getUser(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("사용자 없음");
+        }
         return new UserDetailsImpl(user);
     }
 }

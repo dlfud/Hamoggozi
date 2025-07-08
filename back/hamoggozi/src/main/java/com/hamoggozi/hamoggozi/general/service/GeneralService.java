@@ -17,10 +17,7 @@ public class GeneralService implements GeneralServiceI {
 
 
     @Override
-    public String join(UserBean userbean) {
-        return generalDao.join(User.builder()
-                .username(userbean.getId())
-                .password(passwordEncoder.encode(userbean.getPw())) //password 인코딩(암호화하기)
-                .build()).getId();
+    public int insertUserBean(UserBean userBean) throws Exception {
+        return generalDao.insertUserBean(userBean);
     }
 }

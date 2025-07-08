@@ -1,25 +1,10 @@
 package com.hamoggozi.hamoggozi.dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name="onelinediary")
 public class OneLineDiaryBean {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="uid")
     private int uid;
-    @Column(name="content")
     private String content;
-    @Column(name="useruid")
     private int userUid;
-    @Column(name="insertdate")
     private String insertDate;
-    @Column(name="updatedate")
     private String updateDate;
 
     public int getUid() {

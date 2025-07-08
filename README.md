@@ -18,10 +18,16 @@ springboot 세팅
 - JWT 사용
 
 
-- 회원가입 로직 추가
+- 회원가입 에러 수정
 - 로그인 시 403뜨는 에러 수정 -> 현재는 아이디와 비밀번호를 틀려서 스크립트 오류 남
 - 로그인 시 틀려서 에러날 경우 팝업 처리
 
+
+2025-07-08(화)
+- 회원가입 페이지 추가
+- controller -> serviceI -> service -> dao -> .xml mybatis 사용 방식으로 쿼리 작성
+- JPA로 계속 인식되는 문제 -> dto bean설정시 어노테이션 제거, dao @Mapper 설정 및 상속 제거, application에 @MapperScan설정, xml 파일 내용 수정
+implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'버전 3.0.2 -> 3.0.3으로 변경
 
 
 2025-07-07(월)

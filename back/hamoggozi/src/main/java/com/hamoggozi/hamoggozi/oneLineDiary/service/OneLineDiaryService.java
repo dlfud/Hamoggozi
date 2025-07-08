@@ -13,7 +13,7 @@ public class OneLineDiaryService implements OneLineDiaryServiceI{
     private OneLineDiaryDao oneLineDiaryDao;
 
     @Override
-    public List<OneLineDiaryBean> getOneLineDiaryList() {
+    public List<OneLineDiaryBean> getOneLineDiaryList() throws Exception{
         System.out.println(oneLineDiaryDao.getOneLineDiaryList());
         return oneLineDiaryDao.getOneLineDiaryList();
     }

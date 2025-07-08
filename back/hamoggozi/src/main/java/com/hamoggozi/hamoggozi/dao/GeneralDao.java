@@ -1,20 +1,12 @@
 package com.hamoggozi.hamoggozi.dao;
 
 import com.hamoggozi.hamoggozi.dto.UserBean;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
-import java.util.Optional;
+@Mapper
+public interface GeneralDao {
 
-@Repository
-public interface GeneralDao extends JpaRepository<UserBean, Integer> {
+    int insertUserBean(UserBean userBean) throws Exception;
 
-    @Query(name="userBean.join", nativeQuery = true)
-    UserBean join(UserDetails build);
-
-    @Query(name="UserBean.getUser", nativeQuery = true)
-    Optional<UserBean> getUser(String id);
+    UserBean getUser(String id);
 }

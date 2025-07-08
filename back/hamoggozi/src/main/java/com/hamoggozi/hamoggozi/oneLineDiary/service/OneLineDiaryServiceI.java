@@ -6,5 +6,5 @@ import java.util.List;
 
 
 public interface OneLineDiaryServiceI {
-    public List<OneLineDiaryBean> getOneLineDiaryList();
+    public List<OneLineDiaryBean> getOneLineDiaryList() throws Exception;
 }

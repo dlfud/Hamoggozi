@@ -1,19 +1,14 @@
 package com.hamoggozi.hamoggozi.dao;
 
 import com.hamoggozi.hamoggozi.dto.OneLineDiaryBean;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Repository
-public interface OneLineDiaryDao extends JpaRepository<OneLineDiaryBean, Integer> {
+@Mapper
+public interface OneLineDiaryDao {
 
-//    @Query("SELECT OD.uid, OD.content, OD.userUid FROM OneLineDiaryBean OD")
-//    @Query(value = "SELECT OD.uid, OD.content, OD.userUid FROM OneLineDiaryBean OD", nativeQuery = true)
-    @Query(name = "OneLineDiaryBean.getOneLineDiaryList", nativeQuery = true)
-    List<OneLineDiaryBean> getOneLineDiaryList();
+    List<OneLineDiaryBean> getOneLineDiaryList() throws Exception;
 
 
 }

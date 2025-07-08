@@ -37,14 +37,16 @@ public class GeneralController {
 
 //    //회원가입
     @RequestMapping(value="/join", method=RequestMethod.POST)
-    public ResponseEntity<String> signup(UserBean userbean) {
-        userbean.setPw(passwordEncoder.encode(userbean.getPw()));
-        generalService.join(userbean);
+    public ResponseEntity<String> signup(@RequestBody UserBean userBean) throws Exception{
+        userBean.setPw(passwordEncoder.encode(userBean.getPw()));
+        userBean.setInsertBy(1);
+        userBean.setUpdateBy(1);
+        generalService.insertUserBean(userBean);
         return ResponseEntity.ok().body("회원가입에 성공하였습니다. 축하축하");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserBean userBean) {
+    public ResponseEntity<?> login(@RequestBody UserBean userBean) throws Exception{
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userBean.getId(), userBean.getPw())
         );
@@ -54,7 +56,7 @@ public class GeneralController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
+    public ResponseEntity<?> logout(HttpServletRequest request) throws Exception{
         String token = jwtUtil.resolveToken(request);
 
         if (token != null && jwtUtil.validateToken(token)) {

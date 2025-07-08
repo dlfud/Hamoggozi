@@ -5,5 +5,5 @@ import com.hamoggozi.hamoggozi.dto.UserBean;
 
 public interface GeneralServiceI {
 
-    String join(UserBean userbean);
+    int insertUserBean(UserBean userbean) throws Exception;
 }

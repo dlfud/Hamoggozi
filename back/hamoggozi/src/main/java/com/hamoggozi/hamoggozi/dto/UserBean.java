@@ -1,31 +1,15 @@
 package com.hamoggozi.hamoggozi.dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name="user")
 public class UserBean {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="uid")
     private int uid;
-    @Column(name="id")
     private String id;
-    @Column(name="pw")
     private String pw;
-    @Column(name="name")
     private String name;
-    @Column(name="phone")
-    private String phoen;
-    @Column(name="auth")
+    private String phone;
     private String auth;
-    @Column(name="insertdate")
+    private int insertBy;
     private String insertDate;
-    @Column(name="updatedate")
+    private int updateBy;
     private String updateDate;
 
     public int getUid() {
@@ -56,11 +40,11 @@ public class UserBean {
         this.name = name;
     }
 
-    public String getPhoen() {
-        return phoen;
+    public String getPhone() {
+        return phone;
     }
-    public void setPhoen(String phoen) {
-        this.phoen = phoen;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAuth() {
@@ -70,11 +54,25 @@ public class UserBean {
         this.auth = auth;
     }
 
+    public int getInsertBy() {
+        return insertBy;
+    }
+    public void setInsertBy(int insertBy) {
+        this.insertBy = insertBy;
+    }
+
     public String getInsertDate() {
         return insertDate;
     }
     public void setInsertDate(String insertDate) {
         this.insertDate = insertDate;
+    }
+
+    public int getUpdateBy() {
+        return updateBy;
+    }
+    public void setUpdateBy(int updateBy) {
+        this.updateBy = updateBy;
     }
 
     public String getUpdateDate() {
@@ -83,4 +81,5 @@ public class UserBean {
     public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
     }
+
 }
