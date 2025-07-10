@@ -4,12 +4,9 @@ import com.hamoggozi.hamoggozi.dto.UserBean;
 import com.hamoggozi.hamoggozi.general.service.GeneralServiceI;
 import com.hamoggozi.hamoggozi.jwt.JwtUtil;
 import com.hamoggozi.hamoggozi.jwt.RedisService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +35,9 @@ public class GeneralController {
 //    //회원가입
     @RequestMapping(value="/join", method=RequestMethod.POST)
     public ResponseEntity<String> signup(@RequestBody UserBean userBean) throws Exception{
+        System.out.println(
+                "📍 XML 경로 확인: " + getClass().getClassLoader().getResource("mapper/General.xml")
+        );
         userBean.setPw(passwordEncoder.encode(userBean.getPw()));
         userBean.setInsertBy(1);
         userBean.setUpdateBy(1);

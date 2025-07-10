@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/back.iml" filepath="$PROJECT_DIR$/.idea/back.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hamoggozi.iml" filepath="$PROJECT_DIR$/.idea/modules/hamoggozi.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/hamoggozi.main.iml" filepath="$PROJECT_DIR$/.idea/modules/hamoggozi.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hamoggozi.test.iml" filepath="$PROJECT_DIR$/.idea/modules/hamoggozi.test.iml" />
     </modules>
   </component>
 </project>

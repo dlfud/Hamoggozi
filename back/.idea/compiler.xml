@@ -11,5 +11,10 @@
         <module name="hamoggozi.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="hamoggozi" target="17" />
+      <module name="hamoggozi.main" target="17" />
+      <module name="hamoggozi.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

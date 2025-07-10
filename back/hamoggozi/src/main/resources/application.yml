@@ -3,25 +3,18 @@
 server:
   port: 8080
 spring:
-  data:
-    redis:
-      host: localhost
-      port: 8080
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hamo?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/hamo?serverTimezone=UTC&characterEncoding=UTF-8
     username: hamo
     password: hamo
+    driver-class-name: com.mysql.cj.jdbc.Driver
   mybatis:
-    mapper-location: classpath:/mapper/*.xml
+    mapper-locations: classpath:mapper/*.xml
     type-aliases-package: com.hamoggozi.hamoggozi.dto
     configuration:
       map-underscore-to-camel-case: true
 logging:
   level:
+    org.mybatis: DEBUG
+    org.apache.ibatis: DEBUG
     org.springframework.security: DEBUG
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
