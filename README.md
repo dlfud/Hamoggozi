@@ -9,18 +9,22 @@
 
 springboot 세팅
 - Spring Boot Dev Tools
-- Lombok
 - Spring Web
-- Spring Data JPA
 - Spring Security
 - MySQL Driver
 - Mybatis
 - JWT 사용
 
 
-- 회원가입 에러 수정
+
+
 - 로그인 시 403뜨는 에러 수정 -> 현재는 아이디와 비밀번호를 틀려서 스크립트 오류 남
 - 로그인 시 틀려서 에러날 경우 팝업 처리
+
+
+2025-07-10(목)
+- 한참 binding에러 찾다가 못잡아서 새로 back springboot 생성 -> join 성공확인
+
 
 2025-07-09(수)
 - xml파일 읽는데 에러남 (org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):) -> 아직 해결중
