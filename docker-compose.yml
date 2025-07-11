@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  springboot:
+    build:
+      context: ./back
+    container_name: springboot-app
+    restart: always
+    depends_on:
+      - redis
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/hamo
+      SPRING_DATASOURCE_USERNAME: hamo
+      SPRING_DATASOURCE_PASSWORD: hamo
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+
+  react:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: react-app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - springboot

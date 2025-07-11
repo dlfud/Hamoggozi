@@ -7,19 +7,29 @@
 - react
 - nodejs
 
-springboot 세팅
-- Spring Boot Dev Tools
+springboot 세팅 (3.5.3)
+- react
 - Spring Web
 - Spring Security
 - MySQL Driver
-- Mybatis
-- JWT 사용
+- HikariCP
+- Mybatis (3.0.3)
+- JWT 
+- redis 
+- lettuce
+- docker (4.43.1)
 
-
-
-
-- 로그인 시 403뜨는 에러 수정 -> 현재는 아이디와 비밀번호를 틀려서 스크립트 오류 남
+해야 할 일
+- 로그인 성공
 - 로그인 시 틀려서 에러날 경우 팝업 처리
+
+2025-07-11(금)
+- secretKey 긴걸로 변경
+- luttuce 의존성 추가
+- redis, react, springboot docker사용으로 변경 중 (docker run -d -p 6379:6379 --name my-redis redis)
+    -> react, springboot까지 docker에 넣어서 사용하려고 했으나 변경시 다시 빌드해야하는 번거로움이 있음. 일단 redis만 빌드해서 사용 시도
+    -> springboot jar파일 배포 위치 프로젝트 안으로 변경 -> Dockerfile의 상대경로로 찾기 때문에 변경
+    -> cd C:\project\hamoggozi   ->   docker-compose up --build
 
 
 2025-07-10(목)

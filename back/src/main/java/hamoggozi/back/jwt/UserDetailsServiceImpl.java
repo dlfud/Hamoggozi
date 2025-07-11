@@ -2,6 +2,7 @@ package hamoggozi.back.jwt;
 
 import hamoggozi.back.dao.GeneralDao;
 import hamoggozi.back.dto.UserBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    @Autowired
     private GeneralDao generalDao;
 
     @Override

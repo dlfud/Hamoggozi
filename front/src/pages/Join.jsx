@@ -7,6 +7,7 @@ const SignUpPage = () => {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
@@ -16,10 +17,8 @@ const SignUpPage = () => {
         id,
         pw,
         name,
+        phone,
       });
-
-      console.log(id)
-      console.log(pw)
 
       alert(response.data); // ex: 회원가입 성공
       navigate('/login'); // 가입 후 로그인 페이지로 이동
@@ -57,6 +56,15 @@ const SignUpPage = () => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>PHONE: </label>
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             required
           />
         </div>
