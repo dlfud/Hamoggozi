@@ -12,8 +12,6 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      console.log(id)
-      console.log(pw)
       const res = await axios.post("/login", { id, pw }); // Spring 서버로 로그인 요청
       const token = res.data; // 서버에서 JWT 응답 받음
       localStorage.setItem("jwtToken", token); // 로컬 스토리지에 저장

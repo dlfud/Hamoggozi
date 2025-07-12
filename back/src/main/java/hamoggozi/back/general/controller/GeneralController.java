@@ -69,4 +69,9 @@ public class GeneralController {
 
         return ResponseEntity.ok("로그아웃 완료");
     }
+
+    @RequestMapping(value="/main", method=RequestMethod.GET)
+    public ResponseEntity<String> main(HttpServletRequest request) throws Exception{
+        return ResponseEntity.ok("mainPage");
+    }
 }
