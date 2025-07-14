@@ -13,12 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class GeneralController {
@@ -32,6 +31,24 @@ public class GeneralController {
     private GeneralServiceI generalService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+
+    @RequestMapping(value="/validate-token", method=RequestMethod.GET)
+    public ResponseEntity<Map<String, Boolean>> validateToken(HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        boolean isValid = false;
+
+        if (token != null && jwtUtil.validateToken(token)) {
+            // 블랙리스트 체크 로직 추가
+            if (!redisService.isBlacklisted(token)) {
+                isValid = true;
+            }
+        }
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("valid", isValid);
+        return ResponseEntity.ok(response);
+    }
 
     @RequestMapping(value="/join", method= RequestMethod.POST)
     public ResponseEntity<String> signup(@RequestBody UserBean userBean) throws Exception{
@@ -71,7 +88,11 @@ public class GeneralController {
     }
 
     @RequestMapping(value="/main", method=RequestMethod.GET)
-    public ResponseEntity<String> main(HttpServletRequest request) throws Exception{
-        return ResponseEntity.ok("mainPage");
+    public ResponseEntity<UserBean> main(HttpServletRequest request, @RequestHeader("Authorization") String authHeader) throws Exception{
+        String token = authHeader.replace("Bearer ", "");
+        String userId = jwtUtil.getUsername(token);
+        UserBean userBean = generalService.getUserBean(userId);
+
+        return ResponseEntity.ok(userBean);
     }
 }

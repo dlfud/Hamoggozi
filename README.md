@@ -22,6 +22,32 @@ springboot 세팅 (3.5.3)
 해야 할 일
 - 리프레시 토큰 로직 추가
 - 로그인 시 틀려서 에러날 경우 팝업 처리
+- 로그인 아이디 이메일 형식 유효성 확인 로직 추가
+- 회원가입 시 아이디 겹칠 경우 회원가입 막기
+- post isnert 기능 추가
+- post update 기능 추가
+- post category 도메인 추가
+- post 검색 기능
+- 한줄 일기 insert, update, delete
+- 달력 할일 insert, update, delete
+- 설정에서 post category 도메인 수정 페이지
+- 사용자 프로필 편집 및 설정 페이지
+- 사용자 프로필 이미지, 별명, 비밀번호 등등 수정 
+- 배경 이미지 편집
+- 공지 insert, update, delete
+- 
+
+
+2025-07-14(월)
+- 로그인 화면에 회원가입 버튼 추가
+- jstl의존성 추가
+- post DB테이블 추가
+- post테이블에서 useruid에 해당하는 값 가져옴
+- /으로 진입 시 토큰과 유효한지 확인 후 /main으로 보냄
+- category별로 가져오도록 쿼리문 if문 추가
+- 상단, left레이아웃 임의로 추가
+- post 상세페이지 이동 추가
+- post 상세 페이지 삭제 기능 추가
 
 
 2025-07-12(토)

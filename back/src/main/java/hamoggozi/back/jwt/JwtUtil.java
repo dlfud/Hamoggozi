@@ -1,5 +1,6 @@
 package hamoggozi.back.jwt;
 
+import hamoggozi.back.dto.UserBean;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,12 +14,12 @@ public class JwtUtil {
     private final String SECRET_KEY = "YN2yjFv9rJXXU89LrQAD+PBvCIJPSjKUhY/L+xCSNes=";
     private final long EXPIRATION = 1000 * 60 * 30; // 30분
 
-    public String generateToken(String username) {
+    public String generateToken(String id) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + EXPIRATION);
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(id)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)

@@ -1,5 +1,4 @@
-// src/pages/LoginPage.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../api/axios"; // 위에서 만든 axios 인스턴스
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +6,21 @@ const Login = () => {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const res = await axios.get("/validate-token");
+        if (res.data.valid) {
+          navigate("/main");
+        }
+      } catch (err) {
+        console.log("토큰 없음 or 유효하지 않음");
+      }
+    };
+
+    checkToken();
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,13 +35,20 @@ const Login = () => {
     }
   };
 
+  const goJoinPage = () => {
+    navigate("/join");
+  }
+
   return (
-    <form onSubmit={handleLogin}>
-      <h2>로그인</h2>
-      <input type="text" value={id} onChange={(e) => setId(e.target.value)} placeholder="ID" />
-      <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="PW" />
-      <button type="submit">로그인</button>
-    </form>
+    <div>
+      <form onSubmit={handleLogin}>
+        <h2>로그인</h2>
+        <input type="text" value={id} onChange={(e) => setId(e.target.value)} placeholder="ID" />
+        <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="PW" />
+        <button type="submit">로그인</button>
+      </form>
+      <button onClick={goJoinPage}>회원가입</button>
+    </div>
   );
 };
 

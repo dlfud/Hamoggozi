@@ -14,4 +14,9 @@ public class GeneralService implements GeneralServiceI {
     public void insertUser(UserBean userBean) throws Exception {
         generalDao.insertUser(userBean);
     }
+
+    @Override
+    public UserBean getUserBean(String userId) throws Exception {
+        return generalDao.getUser(userId);
+    }
 }

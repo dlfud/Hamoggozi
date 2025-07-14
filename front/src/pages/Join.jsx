@@ -1,4 +1,3 @@
-// src/pages/SignUpPage.jsx
 import React, { useState } from 'react';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
@@ -27,6 +26,10 @@ const SignUpPage = () => {
       alert('회원가입 실패');
     }
   };
+  
+  const goLogin = () => {
+    navigate('/')
+  }
 
   return (
     <div style={{ padding: 20 }}>
@@ -70,6 +73,7 @@ const SignUpPage = () => {
         </div>
         <button type="submit">회원가입</button>
       </form>
+      <button onClick={goLogin}>로그인</button>
     </div>
   );
 };
