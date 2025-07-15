@@ -71,7 +71,9 @@ public class GeneralController {
                 new UsernamePasswordAuthenticationToken(userBean.getId(), userBean.getPw())
         );
 
-        String token = jwtUtil.generateToken(userBean.getId());
+        UserBean searchUserInfo = generalService.getUserBean(userBean.getId());
+
+        String token = jwtUtil.generateToken(userBean.getId(), searchUserInfo.getUid());
         return ResponseEntity.ok(token);
     }
 

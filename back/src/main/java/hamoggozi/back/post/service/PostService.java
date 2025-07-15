@@ -26,12 +26,12 @@ public class PostService implements PostServiceI {
 
     @Override
     public int insertPost(PostBean postBean) throws Exception {
-        return 0;
+        return postDao.insertPost(postBean);
     }
 
     @Override
     public int updatePost(PostBean postBean) throws Exception {
-        return 0;
+        return postDao.updatePost(postBean);
     }
 
     @Override

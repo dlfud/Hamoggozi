@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
+import ReactMarkdown from 'react-markdown';
 import { useNavigate, useParams } from "react-router-dom";
 
 const PostDetail = () => {
   const { uid } = useParams();
   const [postData, setPostData] = useState({})
+  const [markdown, setMarkdown] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,6 +16,7 @@ const PostDetail = () => {
   const getPostDetail = async () => {
     try {
       const res = await axios.post("/post/getPostDetail", {uid: uid});
+      console.log(res.data.content)
       setPostData(res.data)
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");
@@ -50,7 +53,7 @@ const PostDetail = () => {
       <button onClick={updatePost}>수정하기</button>
       <p>UID: {uid}</p>
       <p>TITLE: {postData.title}</p>
-      <p>CONTENT: {postData.content}</p>
+      <p>CONTENT: <ReactMarkdown>{postData.content}</ReactMarkdown></p>
       <p>userName: {postData.userName}</p>
       <p>updateDate: {postData.updateDate}</p>
     </div>

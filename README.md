@@ -38,7 +38,14 @@ springboot 세팅 (3.5.3)
 - 
 
 2025-07-15(화)
-
+- CKEditor 5 react 라이브러리 추가
+- react markdown 라이브러리 추가
+- react turndown 라이브러리 추가
+- react marked 라이브러리 추가
+- jsoup 의존성 추가
+- flexmark-java 의존성 추가
+- html 저장 및 마크다운변환 후 데이터 불러와서 뿌림
+- post 입력 및 수정 기능 추가
 
 
 2025-07-14(월)

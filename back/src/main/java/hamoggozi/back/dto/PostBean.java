@@ -6,6 +6,9 @@ public class PostBean {
     private String title;
     private String content;
     private String category;
+    private int insertBy;
+    private String insertDate;
+    private int updateBy;
     private String updateDate;
 
     private String userName;
@@ -43,6 +46,27 @@ public class PostBean {
     }
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public int getInsertBy() {
+        return insertBy;
+    }
+    public void setInsertBy(int insertBy) {
+        this.insertBy = insertBy;
+    }
+
+    public String getInsertDate() {
+        return insertDate;
+    }
+    public void setInsertDate(String insertDate) {
+        this.insertDate = insertDate;
+    }
+
+    public int getUpdateBy() {
+        return updateBy;
+    }
+    public void setUpdateBy(int updateBy) {
+        this.updateBy = updateBy;
     }
 
     public String getUpdateDate() {
