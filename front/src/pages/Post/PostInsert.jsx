@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "../../api/axios";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate, useParams } from "react-router-dom";
+import { MyCustomUploadAdapterPlugin, extractTempImages
+        , uploadedTempImages, deleteTempImages } from '../../util/UploadPostFileUtil';
 
 const InsertPost = ({ defaultCategory = 'ALL' }) => {
   const [category, setCategory] = useState()
@@ -16,18 +18,38 @@ const InsertPost = ({ defaultCategory = 'ALL' }) => {
 
   const insertPost = async () => {
     try {
-      const res = await axios.post("/post/insertPost", {category: category, title: title, content: content});
+      const usedTempImages = extractTempImages(content);
+
+      const imagesToMove = [];
+      const imagesToDelete = [];
+
+      uploadedTempImages.forEach((url) => {
+        if (usedTempImages.includes(url)) {
+          imagesToMove.push(url);
+        } else {
+          imagesToDelete.push(url);
+        }
+      });
+
+      const res = await axios.post("/post/insertPost", {category: category, title: title, content: content, moveFile: imagesToMove, deleteFile: imagesToDelete});
       if(res.data.code === '200'){
+        uploadedTempImages.clear();
         navigate(`/`)
       }
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");
+      uploadedTempImages.clear();
       navigate("/");
     }
   }
 
-  const cancelInsertPost = () => {
-    navigate(`/main`)
+  const cancelInsertPost = async () => {
+    let response = await deleteTempImages()
+
+    if(response.code === '200'){
+      uploadedTempImages.clear();
+      navigate(`/main`)
+    }
   }
 
   return (
@@ -44,6 +66,7 @@ const InsertPost = ({ defaultCategory = 'ALL' }) => {
           config={{
               toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
               removePlugins: ['MediaEmbed', 'HtmlEmbed', 'Iframe'],
+              extraPlugins: [MyCustomUploadAdapterPlugin] 
           }}
           onChange={(event, editor) => {
               setContent(editor.getData());

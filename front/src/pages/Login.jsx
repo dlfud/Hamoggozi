@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios"; // 위에서 만든 axios 인스턴스
 import { useNavigate } from "react-router-dom";
+import '../App.css';
 
 const Login = () => {
   const [id, setId] = useState("");
@@ -40,14 +41,18 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={handleLogin}>
-        <h2>로그인</h2>
-        <input type="text" value={id} onChange={(e) => setId(e.target.value)} placeholder="ID" />
-        <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="PW" />
-        <button type="submit">로그인</button>
-      </form>
-      <button onClick={goJoinPage}>회원가입</button>
+    <div className="contain">
+      <div className="content">
+        <h2 className="loginLog">로그인</h2>
+        <form onSubmit={handleLogin}>
+          <div className="loginInput">
+            <input type="text" value={id} onChange={(e) => setId(e.target.value)} placeholder="ID" />
+            <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="PW" />
+          </div>
+          <button type="submit">로그인</button>
+        </form>
+        <button onClick={goJoinPage}>회원가입</button>
+      </div>
     </div>
   );
 };

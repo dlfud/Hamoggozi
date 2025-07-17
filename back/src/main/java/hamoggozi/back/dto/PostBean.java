@@ -1,5 +1,7 @@
 package hamoggozi.back.dto;
 
+import java.util.List;
+
 public class PostBean {
     private int uid;
     private int userUid;
@@ -12,6 +14,9 @@ public class PostBean {
     private String updateDate;
 
     private String userName;
+
+    private List<String> moveFile;
+    private List<String> deleteFile;
 
     public int getUid() {
         return uid;
@@ -81,5 +86,19 @@ public class PostBean {
     }
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public List<String> getMoveFile() {
+        return moveFile;
+    }
+    public void setMoveFile(List<String> moveFile) {
+        this.moveFile = moveFile;
+    }
+
+    public List<String> getDeleteFile() {
+        return deleteFile;
+    }
+    public void setDeleteFile(List<String> deleteFile) {
+        this.deleteFile = deleteFile;
     }
 }

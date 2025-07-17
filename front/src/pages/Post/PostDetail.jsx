@@ -53,7 +53,7 @@ const PostDetail = () => {
       <button onClick={updatePost}>수정하기</button>
       <p>UID: {uid}</p>
       <p>TITLE: {postData.title}</p>
-      <p>CONTENT: <ReactMarkdown>{postData.content}</ReactMarkdown></p>
+      <p>CONTENT: </p><ReactMarkdown>{postData.content}</ReactMarkdown>
       <p>userName: {postData.userName}</p>
       <p>updateDate: {postData.updateDate}</p>
     </div>

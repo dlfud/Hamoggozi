@@ -13,7 +13,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     private final String SECRET_KEY = "YN2yjFv9rJXXU89LrQAD+PBvCIJPSjKUhY/L+xCSNes=";
-    private final long EXPIRATION = 1000 * 60 * 30; // 30분
+    private final long EXPIRATION = 1000 * 60 * 30 * 30; // 30분 * 30
 
     public String generateToken(String id, int uid) {
         Date now = new Date();
