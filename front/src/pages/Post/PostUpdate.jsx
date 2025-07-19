@@ -5,6 +5,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ReactMarkdown from 'react-markdown';
 import { marked } from 'marked';
 import { useNavigate, useParams } from "react-router-dom";
+import { MyCustomUploadAdapterPlugin, extractTempImages
+        , uploadedTempImages, deleteTempImages, 
+        extractImages} from '../../util/UploadPostFileUtil';
 
 const UpdatePost = ({ defaultCategory = 'ALL' }) => {
   const { uid } = useParams();
@@ -12,6 +15,7 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
   const [category, setCategory] = useState()
   const [title, setTitle] = useState()
   const [content, setContent] = useState()
+  const [initialImages, setInitialImages] = useState([])
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +28,9 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
         const res = await axios.post("/post/getPostDetail", {uid: uid});
         const convertedContent = marked(res.data.content);
         setPostData({ ...res.data, content: convertedContent });
+
+        const imgTags = extractImages(convertedContent);
+        setInitialImages(imgTags);
       } catch (err) {
         alert("인증되지 않은 사용자입니다.");
         navigate("/");
@@ -41,18 +48,39 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
 
   const updatePost = async () => {
     try {
-      const res = await axios.post("/post/updatePost", {uid: uid, category: category, title: title, content: content});
+      const usedImages = extractImages(content);
+
+      const imagesToDelete = initialImages.filter(img => !usedImages.includes(img))
+
+      const imagesToMove = []
+      const tempImagesToDelete = []
+      uploadedTempImages.forEach((url) => {
+        if (usedImages.includes(url)) {
+          imagesToMove.push(url);
+        } else {
+          tempImagesToDelete.push(url);
+        }
+      });
+
+      const res = await axios.post("/post/updatePost", {uid: uid, category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: tempImagesToDelete, deleteFile: imagesToDelete});
       if(res.data.code === '200'){
+        uploadedTempImages.clear();
         navigate(`/`)
       }
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");
+      uploadedTempImages.clear();
       navigate("/");
     }
   }
 
-  const cancelUpdatePost = () => {
-    navigate(`/post/postDetail/${uid}`)
+  const cancelUpdatePost = async () => {
+    let response = await deleteTempImages()
+    
+    if(response.code === '200'){
+      uploadedTempImages.clear();
+      navigate(`/post/postDetail/${uid}`)
+    }
   }
 
 
@@ -67,6 +95,11 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
       <CKEditor
         editor={ClassicEditor}
         data={content}
+        config={{
+            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
+            removePlugins: ['MediaEmbed', 'HtmlEmbed', 'Iframe'],
+            extraPlugins: [MyCustomUploadAdapterPlugin] 
+        }}
         onChange={(event, editor) => {
             setContent(editor.getData());
         }}

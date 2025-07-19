@@ -1,6 +1,7 @@
 package hamoggozi.back.post.controller;
 
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
+import hamoggozi.back.dto.FileBean;
 import hamoggozi.back.dto.PostBean;
 import hamoggozi.back.dto.UserBean;
 import hamoggozi.back.general.service.GeneralServiceI;
@@ -26,10 +27,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 public class PostController {
@@ -79,15 +79,24 @@ public class PostController {
         for(String fileUrl: postBean.getMoveFile()){
             String moveUrl = fileUtil.moveFile(fileUrl);
             postBean.setContent(postBean.getContent().replaceAll(fileUrl, moveUrl));
+
+            FileBean fileBean = new FileBean();
+            String url = fileUtil.extractFileUrl(moveUrl);
+            fileBean.setFileName(url.split("/")[2].split("_")[1]);
+            fileBean.setPublickey(url.split("/")[2].split("_")[0]);
+            fileBean.setSaveName(url.split("/")[2]);
+            fileBean.setUrl(url);
+            generalService.insertFile(fileBean);
         }
         //임시폴더에서 삭제한 이미지 삭제
-        for(String fileUrl: postBean.getDeleteFile()){
+        for(String fileUrl: postBean.getTempDeleteFile()){
             fileUtil.deleteTempFile(fileUrl);
         }
 
         String sanitizedContent = Jsoup.clean(postBean.getContent(), Safelist.basicWithImages());
         postBean.setContent(sanitizedContent);
         int result = postService.insertPost(postBean);
+
         if(result > 0) {
             resultMap.put("status", "success");
             resultMap.put("code", "200");
@@ -105,6 +114,32 @@ public class PostController {
         postBean.setUserUid(uid);
         postBean.setInsertBy(uid);
         postBean.setUpdateBy(uid);
+
+        //영구 폴더에서 이미지 삭제
+        for(String fileUrl: postBean.getDeleteFile()){
+            fileUtil.deleteFile(fileUrl);
+
+            String url = fileUtil.extractFileUrl(fileUrl);
+            generalService.deleteFile(url);
+        }
+        //임시폴더 영구폴더로 이동 및 내용 url치환
+        for(String fileUrl: postBean.getMoveFile()){
+            String moveUrl = fileUtil.moveFile(fileUrl);
+            postBean.setContent(postBean.getContent().replaceAll(fileUrl, moveUrl));
+
+            FileBean fileBean = new FileBean();
+            String url = fileUtil.extractFileUrl(moveUrl);
+            fileBean.setFileName(url.split("/")[2].split("_")[1]);
+            fileBean.setPublickey(url.split("/")[2].split("_")[0]);
+            fileBean.setSaveName(url.split("/")[2]);
+            fileBean.setUrl(url);
+            generalService.insertFile(fileBean);
+        }
+        //임시폴더에서 삭제한 이미지 삭제
+        for(String fileUrl: postBean.getTempDeleteFile()){
+            fileUtil.deleteTempFile(fileUrl);
+        }
+
         String sanitizedContent = Jsoup.clean(postBean.getContent(), Safelist.basicWithImages());
         postBean.setContent(sanitizedContent);
         int result = postService.updatePost(postBean);
@@ -119,6 +154,20 @@ public class PostController {
     public ResponseEntity<Map<String, String>> deletePost(@RequestBody PostBean postBean) throws Exception {
         Map<String, String> resultMap = new HashMap<>();
 
+        PostBean postDetail = postService.getPostDetail(postBean);
+
+        String regex = "<img[^>]+src=[\"']([^\">']*images[^\">']*)[\"']";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(postDetail.getContent());
+        while (matcher.find()) {
+            String url = matcher.group(1);
+            String fileUrl = fileUtil.extractFileUrl(url);
+            //폴더에서 이미지 삭제
+            fileUtil.deleteFile(url);
+            //DB에서 정보 삭제
+            generalService.deleteFile(fileUrl);
+        }
+
         int result = postService.deletePost(postBean);
         if(result > 0) {
             resultMap.put("status", "success");
@@ -132,7 +181,8 @@ public class PostController {
     public ResponseEntity<Map<String, String>> uploadTempImg(@RequestParam("tempFile") MultipartFile tempFile) throws Exception {
         Map<String, String> resultMap = new HashMap<>();
 
-        String fileName = UUID.randomUUID() + "_" + tempFile.getOriginalFilename();
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String fileName = uuid + "_" + tempFile.getOriginalFilename();
 
         String fileUrl = fileUtil.uploadFile("temp", tempFile, fileName);
         resultMap.put("fileUrl", fileUrl);

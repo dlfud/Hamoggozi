@@ -25,6 +25,9 @@
     <insert id="insertPost">
         INSERT INTO POST (USERUID, TITLE, CONTENT, CATEGORY, INSERTBY, INSERTDATE, UPDATEBY, UPDATEDATE)
         VALUES (#{userUid}, #{title}, #{content}, #{category}, #{insertBy}, SYSDATE(), #{updateBy}, SYSDATE())
+        <selectKey resultType="int" keyProperty="uid" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
     <update id="updatePost">

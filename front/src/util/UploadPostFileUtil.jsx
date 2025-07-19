@@ -40,6 +40,16 @@ export function extractTempImages(html) {
   return urls;
 }
 
+export function extractImages(html) {
+  const regex = /<img[^>]+src="([^">]+images[^">]+)"/g;
+  const urls = [];
+  let match;
+  while ((match = regex.exec(html)) !== null) {
+    urls.push(match[1]);
+  }
+  return urls;
+}
+
 export async function deleteTempImages(){
   if (uploadedTempImages.size > 0) {
     const response = await axios.post("/post/deleteTempImg", { file: Array.from(uploadedTempImages) })

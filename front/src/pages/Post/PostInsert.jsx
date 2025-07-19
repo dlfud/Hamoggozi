@@ -31,7 +31,7 @@ const InsertPost = ({ defaultCategory = 'ALL' }) => {
         }
       });
 
-      const res = await axios.post("/post/insertPost", {category: category, title: title, content: content, moveFile: imagesToMove, deleteFile: imagesToDelete});
+      const res = await axios.post("/post/insertPost", {category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: imagesToDelete});
       if(res.data.code === '200'){
         uploadedTempImages.clear();
         navigate(`/`)

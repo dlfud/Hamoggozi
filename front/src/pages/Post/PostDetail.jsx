@@ -16,7 +16,6 @@ const PostDetail = () => {
   const getPostDetail = async () => {
     try {
       const res = await axios.post("/post/getPostDetail", {uid: uid});
-      console.log(res.data.content)
       setPostData(res.data)
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");

@@ -16,4 +16,14 @@
         WHERE U.ID = #{id}
     </select>
 
+    <insert id="insertFile">
+        INSERT INTO FILE (FILENAME, SAVENAME, PUBLICKEY, URL, INSERTBY, INSERTDATE, UPDATEBY, UPDATEDATE)
+        VALUES (#{fileName}, #{saveName}, #{publickey}, #{url}, #{insertBy}, SYSDATE(), #{updateBy}, SYSDATE())
+    </insert>
+
+    <delete id="deleteFile">
+        DELETE FROM FILE
+        WHERE URL = #{url}
+    </delete>
+
 </mapper>

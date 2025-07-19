@@ -16,6 +16,7 @@ public class PostBean {
     private String userName;
 
     private List<String> moveFile;
+    private List<String> tempDeleteFile;
     private List<String> deleteFile;
 
     public int getUid() {
@@ -100,5 +101,12 @@ public class PostBean {
     }
     public void setDeleteFile(List<String> deleteFile) {
         this.deleteFile = deleteFile;
+    }
+
+    public List<String> getTempDeleteFile() {
+        return tempDeleteFile;
+    }
+    public void setTempDeleteFile(List<String> tempDeleteFile) {
+        this.tempDeleteFile = tempDeleteFile;
     }
 }
