@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios"; // 위에서 만든 axios 인스턴스
 import { useNavigate } from "react-router-dom";
+import '../Common.css';
 import '../App.css';
 
 const Login = () => {
@@ -27,7 +28,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/login", { id, pw }); // Spring 서버로 로그인 요청
+      const res = await axios.post("/login", { id: id, pw: pw }); // Spring 서버로 로그인 요청
       const token = res.data; // 서버에서 JWT 응답 받음
       localStorage.setItem("jwtToken", token); // 로컬 스토리지에 저장
       navigate("/main"); // 메인 페이지로 이동
@@ -43,15 +44,19 @@ const Login = () => {
   return (
     <div className="contain">
       <div className="content">
-        <h2 className="loginLog">로그인</h2>
-        <form onSubmit={handleLogin}>
-          <div className="loginInput">
-            <input type="text" value={id} onChange={(e) => setId(e.target.value)} placeholder="ID" />
-            <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="PW" />
+        <h2 className="loginLogo">
+          <div className="loginLogoText">HAMO</div>
+        </h2>
+        <div className="loginContent">
+          <div className="inputDiv">
+            <input className="loginInput mb10" type="text" value={id} onChange={(e) => setId(e.target.value)} placeholder="ID" />
+            <input className="loginInput" type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="PW" />
           </div>
-          <button type="submit">로그인</button>
-        </form>
-        <button onClick={goJoinPage}>회원가입</button>
+          <div className="btnDiv">
+            <button className="loginBtn" onClick={handleLogin} type="submit">로그인</button>
+            <button className="joinBtn" onClick={goJoinPage}>회원가입</button>
+          </div>
+        </div>
       </div>
     </div>
   );

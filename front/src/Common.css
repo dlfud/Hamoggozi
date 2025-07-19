@@ -1,0 +1,32 @@
+/*reset*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  font-family: sans-serif;
+}
+
+
+.contain{
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  background-color: #FAEAD3 !important;
+}
+
+.content{
+  width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  background-color: #FAEAD3 !important;
+}
+
+
+.mb10{
+    margin-bottom: 10px;
+}
