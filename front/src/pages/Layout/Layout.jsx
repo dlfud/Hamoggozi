@@ -1,26 +1,49 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Layout = () => {
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken");
+    navigate("/");
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      {/* Header */}
-      <header style={{ background: '#333', color: '#fff', padding: '1rem' }}>
-        <h1>상단 Header</h1>
-      </header>
+    <div className='container'>
+      <div className='headerContent mb10'>
+        <div class="headerBackgroundOverlay"></div>
+        <div className='headerBackgroundImg'></div>
+        <div className='logoutBtn' onClick={handleLogout}>
+          <svg width="30" height="30" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.33333 14C2.96667 14 2.65289 13.8696 2.392 13.6087C2.13111 13.3478 2.00044 13.0338 2 12.6667V3.33333C2 2.96667 2.13067 2.65289 2.392 2.392C2.65333 2.13111 2.96711 2.00044 3.33333 2H8V3.33333H3.33333V12.6667H8V14H3.33333ZM10.6667 11.3333L9.75 10.3667L11.45 8.66667H6V7.33333H11.45L9.75 5.63333L10.6667 4.66667L14 8L10.6667 11.3333Z" fill="#1E1E1E"/>
+          </svg>
+        </div>
+        <div className='profileDiv'>
+          <div className='profileImg'></div>
+          <div>
+            <div>이령</div>
+            <div>99ysl@naver.com</div>
+            <div className='profileInfoAuth'>
+              <div className='mr10'>매니저</div>
+              <div className='profileAuthImg'></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <div style={{ display: 'flex', flex: 1 }}>
-        {/* Sidebar */}
-        <aside style={{ width: '200px', background: '#eee', padding: '1rem' }}>
-          <p>사이드바 메뉴</p>
-          <p>메뉴1</p>
-          <p>메뉴2</p>
-        </aside>
+      <div className='content'>
+        <div className='main'>
+          <div className='left'>
+            <div className='calendar'>달력</div>
+            <div className='menu'>메뉴</div>
+          </div>
 
-        {/* Main Content */}
-        <main style={{ flex: 1, padding: '1rem' }}>
-          <Outlet />  {/* 여기에 페이지가 렌더링됨 */}
-        </main>
+          <div className='right'>
+            <Outlet />
+          </div>
+        </div>
       </div>
     </div>
   );

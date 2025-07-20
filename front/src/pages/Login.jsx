@@ -42,7 +42,7 @@ const Login = () => {
   }
 
   return (
-    <div className="contain">
+    <div className="container">
       <div className="content">
         <h2 className="loginLogo">
           <div className="loginLogoText">HAMO</div>
@@ -53,7 +53,7 @@ const Login = () => {
             <input className="loginInput" type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="PW" />
           </div>
           <div className="btnDiv">
-            <button className="loginBtn" onClick={handleLogin} type="submit">로그인</button>
+            <button className="loginBtn" onClick={handleLogin}>로그인</button>
             <button className="joinBtn" onClick={goJoinPage}>회원가입</button>
           </div>
         </div>

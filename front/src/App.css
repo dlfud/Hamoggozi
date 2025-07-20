@@ -47,7 +47,7 @@
   background-color: #FDF9F2;
   border: 2px solid #FADDB7;
   border-radius: 30px;
-  padding: 0px 10px;
+  padding: 0px 20px;
   font-size: 16px;
 }
 
@@ -61,6 +61,7 @@
   border-radius: 30px;
   padding: 0px 10px;
   display: block;
+  cursor:pointer;
 }
 
 .joinBtn{
@@ -68,4 +69,239 @@
   background-color: #FAEAD3;
   color: #646464;
   margin-top: 8px;
+  cursor:pointer;
+}
+
+/*회원가입*/
+.joinLogo{
+  width:1200px;
+  height: 220px;
+  background-color: #FAEAD3;
+  position: relative;
+}
+
+.joinLogoText{
+  font-size: 60px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.joinContent{
+  width: 1200px;
+  height: 720px;
+  background-color: #FAEAD3;
+  display: flex;
+  flex-direction: column;  
+  justify-content: center; 
+  align-items: center;  
+}
+
+.joinInputDiv{
+  width:460px;
+  height: 400px;
+  background-color: #FAEAD3;
+}
+
+.joinInputContent{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.joinLabel{
+  width:100px;
+  font-size: 18px;
+  margin-right: 10px;
+}
+.joinInput{
+  width: 460px;
+  height: 80px;
+  background-color: #FDF9F2;
+  border: 2px solid #FADDB7;
+  border-radius: 30px;
+  padding: 0px 20px;
+  font-size: 16px;
+}
+
+/*레이아웃*/
+.headerBackgroundImg{
+  width: 1200px;
+  height: 180px;
+  background-image: url("C:\project\hamoggozi\front\src/images/마조리카.jpeg");
+  position: absolute;
+}
+
+.headerBackgroundOverlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #d9d9d980; 
+  z-index: 1;
+}
+
+.logoutBtn{
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  right: 0;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.profileDiv{
+  width: auto;
+  min-width: 190px;
+  height: 70px;
+  position: absolute;
+  display: flex;
+  left: 3%;
+  bottom: 10%;
+  background-color: #d9d9d980;
+  z-index: 2;
+}
+
+.profileImg{
+  width: 70px;
+  height: 70px;
+  background-color: #d9d9d980;
+  border: 2px solid #D47E22;
+  border-radius: 50px;
+  margin-right: 10px;
+  z-index: 2;
+}
+
+.profileInfoAuth{
+  display: flex;
+}
+
+.profileAuthImg{
+  width: 24px;
+  height: 24px;
+  border: 1px solid #D47E22;
+  border-radius: 50px;
+}
+
+/*왼쪽 메뉴*/
+.calendar{
+  width: 300px;
+  height: 250px;
+  border: 2px solid #D47E22;
+  margin: 10px auto;
+}
+
+.menu{
+  width: 300px;
+  height: auto;
+  border: 2px solid #D47E22;
+  margin: 10px auto;
+}
+
+/*오른쪽 content*/
+.searchDiv{
+  width: 840px;
+  height: 40px;
+  background-color: #FAEAD3;
+  margin: 10px 20px;
+}
+
+.search{
+  width: 230px;
+  height: 40px;
+  border: 1px solid #D47E22;
+  background-color: #ffffff80;
+  border-radius: 30px;
+  padding: 0 20px;
+}
+
+.rowCountSelect{
+  width: 85px;
+  height: 40px;
+  border: 1px solid #D47E22;
+  background-color: #ffffff80;
+  border-radius: 30px;
+  float: right;
+}
+
+.postMenu{
+  width: 840px;
+  height: 30px;
+  margin: 10px 20px;
+}
+
+.postMenuBtn{
+  width: auto;
+  height: 30px;
+  border: 1px solid #D47E22;
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 0 10px;
+}
+
+.postDiv{
+  width: 840px;
+  height: 500px;
+  border: 1px solid #D47E22;
+  margin: 0 20px;
+}
+
+.oneDiaryDiv{
+  width: 860px;
+  height: 100px;
+  background-color: #FAEAD3;
+  margin: 30px 10px;
+}
+
+.oneDiaryList{
+  width: 840px;
+  height: 50px;
+  background-color: #ffffff80;
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.oneDiaryDate{
+  flex: 0.2;
+}
+
+.oneDiaryContent{
+  flex: 0.8
+}
+
+.oneDiaryInputBtn{
+  position: relative;
+  width: 840px;
+  height: 40px;
+  background-color: #ffffff80;
+  border: 1px solid #D47E22;
+  border-radius: 50px;
+  margin: 10px 10px;
+  padding: 0 20px;
+}
+
+.oneDiaryInput{
+  position: absolute;
+  width: 750px;
+  height: 39px;
+  left: 0;
+  border: 1px solid #D47E22;
+  border-radius: 50px 0 0 50px;
+  padding: 0 20px;
+}
+
+.oneDiarySendBtn{
+  position: absolute;
+  width: 90px;
+  height: 39px;
+  right: 0px;
+  color: #fff;
+  font-size: 18px;
+  background-color: #D47E22;
+  border: 1px solid #D47E22;
+  border-radius: 0 50px 50px 0;
+  cursor: pointer;
 }

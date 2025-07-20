@@ -28,11 +28,6 @@ const Main = () => {
     }
   }, [userInfo]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
-    navigate("/");
-  };
-
   const getPostList = async () => {
     try {
       const res = await axios.post("/post/getPostList", {userUid: userInfo.uid});
@@ -52,27 +47,48 @@ const Main = () => {
 
   return (
     <div>
-      <h2>메인 페이지</h2>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>UID</th>
-            <th>제목</th>
-            <th>내용</th>
-          </tr>
-        </thead>
-        <tbody>
-          {postList.map(item => (
-            <tr key={item.uid}>
-              <td>{item.uid}</td>
-              <td onClick={() => goPostDetail(item.uid)}>{item.title}</td>
-              <td>{item.updateDate}</td>
+      <div className="searchDiv">
+        <select className="search mr10">
+          <option value="All">ALL</option>
+        </select>
+        <input className="search" type="text" placeholder="Post"></input>
+        <select className="rowCountSelect"></select>
+      </div>
+      
+      <div className="postMenu">
+        <button className="postMenuBtn" onClick={insertPost}>글쓰기</button>
+      </div>
+      <div className="postDiv">
+        <table border="1">
+          <thead>
+            <tr>
+              <th>UID</th>
+              <th>제목</th>
+              <th>내용</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <button onClick={insertPost}>글쓰기</button>
-      <button onClick={handleLogout}>로그아웃</button>
+          </thead>
+          <tbody>
+            {postList.map(item => (
+              <tr key={item.uid}>
+                <td>{item.uid}</td>
+                <td onClick={() => goPostDetail(item.uid)}>{item.title}</td>
+                <td>{item.updateDate}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="oneDiaryDiv">
+        <div className="oneDiaryList">
+          <div className="oneDiaryDate mr10">2025-07-20 11:30</div>
+          <div className="oneDiaryContent">asdfasdf</div>
+        </div>
+        <div className="oneDiaryInputBtn">
+          <input className="oneDiaryInput" typ1e="text"></input>
+          <button className="oneDiarySendBtn">보내기</button>
+        </div>
+      </div>
     </div>
   );
 };

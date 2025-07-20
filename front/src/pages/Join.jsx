@@ -32,48 +32,38 @@ const SignUpPage = () => {
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>회원가입</h2>
-      <form onSubmit={handleSignup}>
+    <div className='container'>
+      <div className='content'>
         <div>
-          <label>ID: </label>
-          <input
-            type="text"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-            required
-          />
+          <h2 className="joinLogo">
+            <div className="joinLogoText">HAMO</div>
+          </h2>
+          <div className='joinContent'>
+            <div className='joinInputDiv'>
+              <div className='joinInputContent'>
+                <label className='joinLabel'>ID: </label>
+                <input className='joinInput' type="text" value={id} onChange={(e) => setId(e.target.value)} required />
+              </div>
+              <div className='joinInputContent'>
+                <label className='joinLabel'>PW: </label>
+                <input className='joinInput' type="password" value={pw} onChange={(e) => setPw(e.target.value)} required />
+              </div>
+              <div className='joinInputContent'>
+                <label className='joinLabel'>NAME: </label>
+                <input className='joinInput' type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+              </div>
+              <div className='joinInputContent'>
+                <label className='joinLabel'>PHONE: </label>
+                <input className='joinInput' type="text" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+              </div>
+            </div>
+            <div className='btnDiv'>
+              <button className='loginBtn' onClick={handleSignup}>회원가입</button>
+              <button className='joinBtn' onClick={goLogin}>로그인</button>
+            </div>
+          </div>
         </div>
-        <div>
-          <label>PW: </label>
-          <input
-            type="password"
-            value={pw}
-            onChange={(e) => setPw(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>NAME: </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>PHONE: </label>
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">회원가입</button>
-      </form>
-      <button onClick={goLogin}>로그인</button>
+      </div>
     </div>
   );
 };
