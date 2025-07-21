@@ -1,11 +1,23 @@
 /*reset*/
+@charset "UTF-8";
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none
 }
 
 html, body, #root {
+  height: 100%;
+  margin: 0;       /* 여백 제거 */
+  padding: 0;
+  background-color: #FAEAD3;
   font-family: sans-serif;
 }
 
@@ -23,15 +35,15 @@ input {
 
 .container{
   box-sizing: border-box;
-  background-color: #FAEAD3 !important;
   min-height: 100vh;
+  background-color: #FAEAD3;
+  padding-bottom: 20px;
 }
 
 .content{
   width: 1200px;
-  height: 100%;
   margin: 0 auto;
-  background-color: #FAEAD3 !important;
+  background-color: #FAEAD3;
 }
 
 /*레이아웃 헤더*/
@@ -60,6 +72,32 @@ input {
   height: auto;
   background-color: #FAEAD3;
 }
+
+
+
+.cursorPointer{
+  cursor: pointer !important;
+}
+
+.scrollbox{
+  overflow-y: auto;
+}
+.scrollbox::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollbox::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 4px;
+}
+.scrollbox::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+.scrollbox::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
 
 
 

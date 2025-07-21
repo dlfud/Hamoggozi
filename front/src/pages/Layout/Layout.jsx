@@ -13,7 +13,7 @@ const Layout = () => {
   return (
     <div className='container'>
       <div className='headerContent mb10'>
-        <div class="headerBackgroundOverlay"></div>
+        <div className="headerBackgroundOverlay"></div>
         <div className='headerBackgroundImg'></div>
         <div className='logoutBtn' onClick={handleLogout}>
           <svg width="30" height="30" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

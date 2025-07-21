@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hamoggozi.back.dao.OneDiaryDao">
+    <select id="getOneDiaryList" resultType="OneDiaryBean">
+        SELECT OD.UID, OD.CONTENT, OD.USERUID, OD.INSERTBY, OD.INSERTDATE, OD.UPDATEBY, OD.UPDATEDATE, U.ID AS userName
+        FROM ONELINEDIARY OD JOIN USER U ON (OD.USERUID = U.UID)
+        ORDER BY INSERTBY DESC
+        LIMIT 10
+    </select>
+
+    <insert id="saveOneDiary">
+        INSERT INTO ONELINEDIARY (CONTENT, USERUID, INSERTBY, INSERTDATE, UPDATEBY, UPDATEDATE)
+        VALUES (#{content}, #{userUid}, #{insertBy}, SYSDATE(), #{updateBy}, SYSDATE())
+    </insert>
+</mapper>

@@ -39,6 +39,16 @@ springboot 세팅 (3.5.3)
 - 추후 AWS S3에 이미지 올릴경우 CDN처리
 - 개인, 비공개 게시글 일 경우 이미지 publickey 권한 제한 및 signed URL 등으로 보안 유지
 
+- oneDiary 옵션 파법 추가
+- oneDiary 삭제 추가
+- oneDiary 수정 추가
+- 
+2025-07-21(월)
+- oneDiary 리스트 불러옴
+- oneDiary 저장 추가
+- 디자인 수정
+
+
 2025-07-20(일)
 - 회원가입 디자인
 - 메인 페이지 디자인
