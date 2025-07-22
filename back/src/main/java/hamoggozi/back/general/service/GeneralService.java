@@ -2,6 +2,7 @@ package hamoggozi.back.general.service;
 
 import hamoggozi.back.dao.GeneralDao;
 import hamoggozi.back.dto.FileBean;
+import hamoggozi.back.dto.NoticeBean;
 import hamoggozi.back.dto.UserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,18 @@ public class GeneralService implements GeneralServiceI {
     public void deleteFile(String url) throws Exception {
         String decodedFilename = URLDecoder.decode(url, StandardCharsets.UTF_8);
         generalDao.deleteFile(decodedFilename);
+    }
+
+    @Override
+    public NoticeBean getNotice() throws Exception {
+        return generalDao.getNotice();
+    }
+
+    @Override
+    public int saveNotice(NoticeBean noticeBean) throws Exception {
+        if(generalDao.getNotice() == null){
+            return generalDao.updateNotice();
+        }
+        return generalDao.insertNotice();
     }
 }

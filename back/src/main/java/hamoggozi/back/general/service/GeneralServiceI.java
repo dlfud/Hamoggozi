@@ -1,6 +1,7 @@
 package hamoggozi.back.general.service;
 
 import hamoggozi.back.dto.FileBean;
+import hamoggozi.back.dto.NoticeBean;
 import hamoggozi.back.dto.UserBean;
 
 public interface GeneralServiceI {
@@ -10,4 +11,8 @@ public interface GeneralServiceI {
 
     void insertFile(FileBean fileBean) throws Exception;
     void deleteFile(String url) throws Exception;
+
+    NoticeBean getNotice() throws Exception;
+
+    int saveNotice(NoticeBean noticeBean) throws Exception;
 }

@@ -32,6 +32,20 @@ input {
   color: inherit;
 }
 
+textarea {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  resize: none;    /* 크기 조절 비활성화 */
+  background: transparent;
+  font: inherit;   /* 부모 폰트 상속 */
+  color: inherit;  /* 부모 색상 상속 */
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+
 
 .container{
   box-sizing: border-box;
@@ -73,7 +87,9 @@ input {
   background-color: #FAEAD3;
 }
 
-
+.flex{
+  display: flex
+}
 
 .cursorPointer{
   cursor: pointer !important;

@@ -200,6 +200,36 @@
 }
 
 /*오른쪽 content*/
+
+/*notic*/
+.noticeDiv{
+  position: relative;
+  width: 840px;
+  height: 200px;
+  margin: 10px 20px 40px 20px;
+}
+
+.noticeHeader{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.noticeContent{
+  width: 820px;
+  height: 160px;
+  border: 2px solid #D47E22;
+  background-color: #ffffff80;
+  padding: 5px 10px;
+}
+
+.noticeInput{
+  width: 100%;
+  height: 100%;
+}
+
+
+/*post*/
 .searchDiv{
   width: 840px;
   height: 40px;
