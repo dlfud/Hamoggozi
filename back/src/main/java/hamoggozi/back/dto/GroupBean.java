@@ -1,15 +1,16 @@
 package hamoggozi.back.dto;
 
-public class OneDiaryBean {
+public class GroupBean {
     private int uid;
-    private String content;
-    private int userUid;
+    private String groupId;
+    private String groupName;
     private int insertBy;
     private String insertDate;
     private int updateBy;
     private String updateDate;
 
-    private String userName;
+    private String auth;
+
 
     public int getUid() {
         return uid;
@@ -18,18 +19,18 @@ public class OneDiaryBean {
         this.uid = uid;
     }
 
-    public String getContent() {
-        return content;
+    public String getGroupId() {
+        return groupId;
     }
-    public void setContent(String content) {
-        this.content = content;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
-    public int getUserUid() {
-        return userUid;
+    public String getGroupName() {
+        return groupName;
     }
-    public void setUserUid(int userUid) {
-        this.userUid = userUid;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public int getInsertBy() {
@@ -60,11 +61,10 @@ public class OneDiaryBean {
         this.updateDate = updateDate;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getAuth() {
+        return auth;
     }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAuth(String auth) {
+        this.auth = auth;
     }
 }

@@ -54,7 +54,6 @@ public class GeneralController {
     @RequestMapping(value="/join", method= RequestMethod.POST)
     public ResponseEntity<String> signup(@RequestBody UserBean userBean) throws Exception{
         userBean.setPw(passwordEncoder.encode(userBean.getPw()));
-        userBean.setAuth("USER");
         userBean.setInsertBy(1);
         userBean.setUpdateBy(1);
         generalService.insertUser(userBean);
@@ -90,8 +89,8 @@ public class GeneralController {
         return ResponseEntity.ok("로그아웃 완료");
     }
 
-    @RequestMapping(value="/main", method=RequestMethod.GET)
-    public ResponseEntity<UserBean> main(HttpServletRequest request, @RequestHeader("Authorization") String authHeader) throws Exception{
+    @RequestMapping(value="/getUserInfo", method=RequestMethod.GET)
+    public ResponseEntity<UserBean> getUserInfo(HttpServletRequest request, @RequestHeader("Authorization") String authHeader) throws Exception{
         String token = authHeader.replace("Bearer ", "");
         String userId = jwtUtil.getUsername(token);
         UserBean userBean = generalService.getUserBean(userId);

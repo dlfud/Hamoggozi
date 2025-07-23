@@ -14,7 +14,7 @@ const Login = () => {
       try {
         const res = await axios.get("/validate-token");
         if (res.data.valid) {
-          navigate("/main");
+          navigate("/groupList");
         }
       } catch (err) {
         console.log("토큰 없음 or 유효하지 않음");
@@ -28,10 +28,10 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/login", { id: id, pw: pw }); // Spring 서버로 로그인 요청
-      const token = res.data; // 서버에서 JWT 응답 받음
-      localStorage.setItem("jwtToken", token); // 로컬 스토리지에 저장
-      navigate("/main"); // 메인 페이지로 이동
+      const res = await axios.post("/login", { id: id, pw: pw });
+      const token = res.data; 
+      localStorage.setItem("jwtToken", token);
+      navigate("/groupList");
     } catch (err) {
       alert("로그인 실패: 아이디 또는 비밀번호 오류");
     }

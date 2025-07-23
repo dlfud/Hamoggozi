@@ -2,6 +2,7 @@ package hamoggozi.back.dto;
 
 public class NoticeBean {
     private int uid;
+    private int groupUid;
     private String content;
     private int insertBy;
     private String insertDate;
@@ -15,6 +16,13 @@ public class NoticeBean {
     }
     public void setUid(int uid) {
         this.uid = uid;
+    }
+
+    public int getGroupUid() {
+        return groupUid;
+    }
+    public void setGroupUid(int groupUid) {
+        this.groupUid = groupUid;
     }
 
     public String getContent() {

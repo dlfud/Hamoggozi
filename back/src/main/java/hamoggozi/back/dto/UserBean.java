@@ -6,7 +6,6 @@ public class UserBean {
     private String pw;
     private String name;
     private String phone;
-    private String auth;
     private int insertBy;
     private String insertDate;
     private int updateBy;
@@ -45,13 +44,6 @@ public class UserBean {
     }
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getAuth() {
-        return auth;
-    }
-    public void setAuth(String auth) {
-        this.auth = auth;
     }
 
     public int getInsertBy() {

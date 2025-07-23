@@ -124,6 +124,24 @@
   font-size: 16px;
 }
 
+/*groupList*/
+.group{
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.groupButton{
+  width: 64px; 
+  height: 64px;
+  border: 2px solid #D47E22;
+  border-radius: 50%;
+  background-color: #ffffff80;
+  cursor: pointer;
+}
+
 /*레이아웃*/
 .headerBackgroundImg{
   width: 1200px;

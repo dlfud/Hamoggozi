@@ -4,6 +4,7 @@ import java.util.List;
 
 public class PostBean {
     private int uid;
+    private int groupUid;
     private int userUid;
     private String title;
     private String content;
@@ -24,6 +25,13 @@ public class PostBean {
     }
     public void setUid(int uid) {
         this.uid = uid;
+    }
+
+    public int getGroupUid() {
+        return groupUid;
+    }
+    public void setGroupUid(int groupUid) {
+        this.groupUid = groupUid;
     }
 
     public int getUserUid() {

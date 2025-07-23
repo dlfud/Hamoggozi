@@ -5,9 +5,9 @@
 
 <mapper namespace="hamoggozi.back.dao.PostDao">
     <select id="getPostList" resultType="PostBean">
-        SELECT P.UID, P.USERUID, P.TITLE, P.CONTENT, P.CATEGORY, P.UPDATEDATE
+        SELECT P.UID, P.GROUPUID, P.USERUID, P.TITLE, P.CONTENT, P.CATEGORY, P.UPDATEDATE
         FROM POST P
-        WHERE P.USERUID = #{userUid}
+        WHERE P.USERUID = #{userUid} AND P.GROUPUID = #{groupUid}
         <where>
             <if test="category != null">
                 AND P.CATEGORY = #{category}
@@ -17,14 +17,14 @@
     </select>
 
     <select id="getPostDetail" resultType="PostBean">
-        SELECT P.UID, P.USERUID, P.TITLE, P.CONTENT, P.CATEGORY, P.UPDATEDATE
+        SELECT P.UID, P.GROUPUID, P.USERUID, P.TITLE, P.CONTENT, P.CATEGORY, P.UPDATEDATE
         FROM POST P
         WHERE P.UID = #{uid}
     </select>
 
     <insert id="insertPost">
-        INSERT INTO POST (USERUID, TITLE, CONTENT, CATEGORY, INSERTBY, INSERTDATE, UPDATEBY, UPDATEDATE)
-        VALUES (#{userUid}, #{title}, #{content}, #{category}, #{insertBy}, SYSDATE(), #{updateBy}, SYSDATE())
+        INSERT INTO POST (GROUPUID, USERUID, TITLE, CONTENT, CATEGORY, INSERTBY, INSERTDATE, UPDATEBY, UPDATEDATE)
+        VALUES (#{groupUid}, #{userUid}, #{title}, #{content}, #{category}, #{insertBy}, SYSDATE(), #{updateBy}, SYSDATE())
         <selectKey resultType="int" keyProperty="uid" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
