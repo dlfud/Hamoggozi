@@ -4,7 +4,7 @@ import { useGroup } from '../util/GroupContext';
 import { useNavigate, useParams } from "react-router-dom";
 
 const Main = () => {
-  const { userInfo, setUserInfo, groupInfo, setGroupInfo } = useGroup();    
+  const { userInfo, groupInfo } = useGroup();    
   const { groupUid } = useParams();
 
   const [isSettingNotice, setIsSettingNotice] = useState(false)
@@ -17,42 +17,22 @@ const Main = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchMain = async () => {
-      try {
-        const res = await axios.post("/group/getGroupInfo", {groupUid: groupUid, userUid: userInfo.uid});
-        if(res.data.success){
-          setGroupInfo(res.data.result)
-          setUserInfo({...userInfo, auth: res.data.result.auth})
-          if(res.data.result.auth === "MANAGER"){
-            setIsSettingNotice(true)
-          }
-        }else{
-          alert("인증되지 않은 사용자입니다.");
-          navigate("/");
-        }
-      } catch (err) {
-        alert("인증되지 않은 사용자입니다.");
-        navigate("/");
-      }
-    };
-
-    fetchMain();
-  }, [navigate]);
-
-  //user정보를 받고, notice, postList
-  useEffect(() => {
-    if (userInfo) {
-      console.log(userInfo)
-      getNotice();
-      getPostList();
+    if(userInfo.auth === "MANAGER"){
+      setIsSettingNotice(true)
+    }else{
+      setIsSettingNotice(false)
     }
+
+    getNotice();
+    getPostList();
   }, [userInfo]);
 
+  //notice
   const getNotice = async () => {
     try {
-      const res = await axios.post("/notice/getNotice", {});
-      if(res.data.uid) setNoticeUid(res.data.uid)
-      if(res.data.content) setNoticeContent(res.data.content);
+      const res = await axios.post("/notice/getNotice", {groupUid: groupUid});
+      setNoticeUid(res.data.uid)
+      setNoticeContent(res.data.content);
     } catch (err) {
       console.error("데이터 가져오기 실패", err);
     }
@@ -66,7 +46,7 @@ const Main = () => {
     setIsEditingNotice(false)
 
      try {
-      const res = await axios.post("/notice/saveNotice", {userUid: userInfo.uid, uid: noticeUid, content: noticeContent});
+      const res = await axios.post("/notice/saveNotice", {userUid: userInfo.uid, uid: noticeUid, groupUid: groupInfo.uid, content: noticeContent});
       if(res.data.code === '200') getNotice()
     } catch (err) {
       console.error("공지 업데이트 실패", err);
@@ -78,6 +58,7 @@ const Main = () => {
     getNotice()
   }
 
+  //post
   const getPostList = async () => {
     try {
       const res = await axios.post("/post/getPostList", {userUid: userInfo.uid});
@@ -132,10 +113,10 @@ const Main = () => {
         
         <div className="noticeContent">
           {!isEditingNotice && (
-            <div>{noticeContent}</div>
+            <div>{noticeContent ? noticeContent : '내용을 입력해 주세요.'}</div>
           )}
           {isEditingNotice && (
-            <textarea className="noticeInput" type="text" placeholder="내용을 입력해 주세요." onChange={(e) => setNoticeContent(e.target.value)}></textarea>
+            <textarea className="noticeInput" type="text" placeholder="내용을 입력해 주세요." onChange={(e) => setNoticeContent(e.target.value)} value={noticeContent ? noticeContent : '내용을 입력해 주세요.'}></textarea>
           )}
         </div>
       </div>

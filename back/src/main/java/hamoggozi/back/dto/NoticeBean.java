@@ -6,7 +6,7 @@ public class NoticeBean {
     private String content;
     private int insertBy;
     private String insertDate;
-    private int updateBY;
+    private int updateBy;
     private String updateDate;
 
     private int userUid;
@@ -46,11 +46,11 @@ public class NoticeBean {
         this.insertDate = insertDate;
     }
 
-    public int getUpdateBY() {
-        return updateBY;
+    public int getUpdateBy() {
+        return updateBy;
     }
-    public void setUpdateBY(int updateBY) {
-        this.updateBY = updateBY;
+    public void setUpdateBy(int updateBy) {
+        this.updateBy = updateBy;
     }
 
     public String getUpdateDate() {

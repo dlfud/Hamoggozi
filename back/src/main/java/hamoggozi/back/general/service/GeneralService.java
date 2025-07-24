@@ -22,7 +22,7 @@ public class GeneralService implements GeneralServiceI {
 
     @Override
     public UserBean getUserBean(String userId) throws Exception {
-        return generalDao.getUser(userId);
+        return generalDao.getUserExceptPw(userId);
     }
 
     @Override
@@ -34,18 +34,5 @@ public class GeneralService implements GeneralServiceI {
     public void deleteFile(String url) throws Exception {
         String decodedFilename = URLDecoder.decode(url, StandardCharsets.UTF_8);
         generalDao.deleteFile(decodedFilename);
-    }
-
-    @Override
-    public NoticeBean getNotice() throws Exception {
-        return generalDao.getNotice();
-    }
-
-    @Override
-    public int saveNotice(NoticeBean noticeBean) throws Exception {
-        if(generalDao.getNotice() == null){
-            return generalDao.updateNotice();
-        }
-        return generalDao.insertNotice();
     }
 }

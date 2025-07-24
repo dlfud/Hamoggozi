@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hamoggozi.back.dao.NoticeDao">
+    <select id="getNotice" resultType="NoticeBean">
+        SELECT N.UID, N.GROUPUID, N.CONTENT, N.INSERTBY, N.INSERTDATE, N.UPDATEBY, N.UPDATEDATE
+        FROM NOTICE N
+        WHERE N.GROUPUID = #{groupUid}
+        ORDER BY N.UID
+        LIMIT 1
+    </select>
+
+    <update id="updateNotice">
+        UPDATE NOTICE
+        SET CONTENT = #{content}, UPDATEBY = #{updateBy}, UPDATEDATE = SYSDATE()
+        WHERE UID = #{uid} AND GROUPUID = #{groupUid}
+    </update>
+
+    <insert id="insertNotice">
+        INSERT INTO NOTICE (GROUPUID, CONTENT, INSERTBY, INSERTDATE, UPDATEBY, UPDATEDATE)
+        VALUES (#{groupUid}, #{content}, #{insertBy}, SYSDATE(), #{updateBy}, SYSDATE())
+    </insert>
+</mapper>

@@ -11,8 +11,4 @@ public interface GeneralServiceI {
 
     void insertFile(FileBean fileBean) throws Exception;
     void deleteFile(String url) throws Exception;
-
-    NoticeBean getNotice() throws Exception;
-
-    int saveNotice(NoticeBean noticeBean) throws Exception;
 }

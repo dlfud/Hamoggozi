@@ -20,7 +20,7 @@ const SignUpPage = () => {
       });
 
       alert(response.data); // ex: 회원가입 성공
-      navigate('/login'); // 가입 후 로그인 페이지로 이동
+      navigate('/'); // 가입 후 로그인 페이지로 이동
     } catch (error) {
       console.error(error);
       alert('회원가입 실패');

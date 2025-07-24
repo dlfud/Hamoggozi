@@ -97,22 +97,4 @@ public class GeneralController {
 
         return ResponseEntity.ok(userBean);
     }
-
-    /*Notice*/
-    @RequestMapping(value="/notice/getNotice", method=RequestMethod.POST)
-    public ResponseEntity<NoticeBean> getNotice() throws Exception{
-        return ResponseEntity.ok().body(generalService.getNotice());
-    }
-
-    @RequestMapping(value="/notice/saveNotice", method=RequestMethod.POST)
-    public ResponseEntity<Map<String, String>> saveNotice(@RequestBody NoticeBean noticeBean) throws Exception{
-        Map<String, String> resultMap = new HashMap<>();
-
-        int result = generalService.saveNotice(noticeBean);
-        if(result > 0){
-            resultMap.put("code", "200");
-            resultMap.put("status", "success");
-        }
-        return ResponseEntity.ok().body(resultMap);
-    }
 }
