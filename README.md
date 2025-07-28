@@ -84,24 +84,33 @@ springboot 세팅 (3.5.3)
 - 로그인 아이디 이메일 형식 유효성 확인 로직 추가
 - 회원가입 시 아이디 겹칠 경우 회원가입 막기
 - post category 도메인 추가
-- post 검색 기능
 - 달력 할일 insert, update, delete
 - 설정에서 post category 도메인 수정 페이지
 - 사용자 프로필 편집 및 설정 페이지
 - 사용자 프로필 이미지, 별명, 비밀번호 등등 수정 
 - 배경 이미지 편집
-- 공지 insert, update, delete
 
 - 추후 AWS S3에 이미지 올릴경우 CDN처리
 - 개인, 비공개 게시글 일 경우 이미지 publickey 권한 제한 및 signed URL 등으로 보안 유지
-
-- notice 추가 / 수정 기능
 
 - 그룹 리스트 페이지 사용자 프로필 설정 페이지 추가
 - Main에서 사용자 권한 따라서 막을 거 막기
 - Main에서 그룹 따라서 게시글 가져오기
 
 - 사용자 정보 수정 페이지 추가
+
+- Category관련 설정 및 검색 추가
+
+- post CURD 기능에 group 추가
+
+- post detail 화면 진입 시 데이터 안나옴
+- layout 화면 로직에 groupUid 변경 시에만 로직 타도록 추가 -> 테스트 필요
+2025-07-28(월)
+- post 제목 및 내용 검색 추가
+- post category 검색 추가
+- post 개수 검색 추가
+- 중복으로 함수 불러오는 오류 수정중 -> post detail 화면 들어갔을 때 데이터 안나옴
+
 
 2025-07-24(목)
 - 그룹 리스트 페이지 로그아웃 추가

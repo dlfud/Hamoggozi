@@ -1,10 +1,9 @@
 package hamoggozi.back.post.controller;
 
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
-import hamoggozi.back.dto.FileBean;
-import hamoggozi.back.dto.PostBean;
-import hamoggozi.back.dto.UserBean;
+import hamoggozi.back.dto.*;
 import hamoggozi.back.general.service.GeneralServiceI;
+import hamoggozi.back.group.service.GroupServiceI;
 import hamoggozi.back.jwt.JwtUtil;
 import hamoggozi.back.jwt.RedisService;
 import hamoggozi.back.post.service.PostService;
@@ -38,13 +37,15 @@ public class PostController {
     @Autowired
     private GeneralServiceI generalService;
     @Autowired
+    private GroupServiceI groupService;
+    @Autowired
     private JwtUtil jwtUtil;
     @Autowired
     private FileUtil fileUtil;
 
     @RequestMapping(value="/post/getPostList", method=RequestMethod.POST)
     public ResponseEntity<List<PostBean>> getPostList(@RequestBody PostBean postBean) throws Exception {
-        List<PostBean> postList = postService.getPostBean(postBean);
+        List<PostBean> postList = postService.getPostList(postBean);
         return ResponseEntity.ok().body(postList);
     }
 
@@ -55,13 +56,28 @@ public class PostController {
     }
 
     @RequestMapping(value="/post/getPostDetail", method=RequestMethod.POST)
-    public ResponseEntity<PostBean> getPostDetail(@RequestHeader("Authorization") String authHeader, @RequestBody PostBean postBean) throws Exception {
-        PostBean postDetail = postService.getPostDetail(postBean);
-        String token = authHeader.replace("Bearer ", "");
-        String userId = jwtUtil.getUsername(token);
-        postDetail.setUserName(userId);
-        postDetail.setContent(htmlToMarkdown(postDetail.getContent()));
-        return ResponseEntity.ok().body(postDetail);
+    public ResponseEntity<Map<String, Object>> getPostDetail(@RequestHeader("Authorization") String authHeader, @RequestBody PostBean postBean) throws Exception {
+        GroupUserBean groupUserBean = new GroupUserBean();
+        groupUserBean.setGroupUid(postBean.getGroupUid());
+        groupUserBean.setUserUid(postBean.getUserUid());
+        int result = groupService.checkGroupUser(groupUserBean);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        if(result > 0) {
+            PostBean postDetail = postService.getPostDetail(postBean);
+            String token = authHeader.replace("Bearer ", "");
+            String userId = jwtUtil.getUsername(token);
+            postDetail.setUserName(userId);
+            postDetail.setContent(htmlToMarkdown(postDetail.getContent()));
+            resultMap.put("code", "200");
+            resultMap.put("status", "success");
+            resultMap.put("result", postDetail);
+        }else{
+            resultMap.put("code", "200");
+            resultMap.put("status", "fail");
+        }
+
+        return ResponseEntity.ok().body(resultMap);
     }
 
     @RequestMapping(value="/post/insertPost", method=RequestMethod.POST)

@@ -1,6 +1,6 @@
 package hamoggozi.back.dto;
 
-public class GroupUserBean {
+public class GroupUserBean extends ParamBean {
     private int uid;
     private int groupUid;
     private int userUid;

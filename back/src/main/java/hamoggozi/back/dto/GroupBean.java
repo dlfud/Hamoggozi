@@ -1,13 +1,9 @@
 package hamoggozi.back.dto;
 
-public class GroupBean {
+public class GroupBean extends ParamBean {
     private int uid;
     private String groupId;
     private String groupName;
-    private int insertBy;
-    private String insertDate;
-    private int updateBy;
-    private String updateDate;
 
     private String auth;
 
@@ -31,34 +27,6 @@ public class GroupBean {
     }
     public void setGroupName(String groupName) {
         this.groupName = groupName;
-    }
-
-    public int getInsertBy() {
-        return insertBy;
-    }
-    public void setInsertBy(int insertBy) {
-        this.insertBy = insertBy;
-    }
-
-    public String getInsertDate() {
-        return insertDate;
-    }
-    public void setInsertDate(String insertDate) {
-        this.insertDate = insertDate;
-    }
-
-    public int getUpdateBy() {
-        return updateBy;
-    }
-    public void setUpdateBy(int updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public String getUpdateDate() {
-        return updateDate;
-    }
-    public void setUpdateDate(String updateDate) {
-        this.updateDate = updateDate;
     }
 
     public String getAuth() {

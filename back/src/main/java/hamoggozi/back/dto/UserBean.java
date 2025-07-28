@@ -1,15 +1,11 @@
 package hamoggozi.back.dto;
 
-public class UserBean {
+public class UserBean extends ParamBean {
     private int uid;
     private String id;
     private String pw;
     private String name;
     private String phone;
-    private int insertBy;
-    private String insertDate;
-    private int updateBy;
-    private String updateDate;
 
     public int getUid() {
         return uid;
@@ -44,33 +40,5 @@ public class UserBean {
     }
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public int getInsertBy() {
-        return insertBy;
-    }
-    public void setInsertBy(int insertBy) {
-        this.insertBy = insertBy;
-    }
-
-    public String getInsertDate() {
-        return insertDate;
-    }
-    public void setInsertDate(String insertDate) {
-        this.insertDate = insertDate;
-    }
-
-    public int getUpdateBy() {
-        return updateBy;
-    }
-    public void setUpdateBy(int updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public String getUpdateDate() {
-        return updateDate;
-    }
-    public void setUpdateDate(String updateDate) {
-        this.updateDate = updateDate;
     }
 }

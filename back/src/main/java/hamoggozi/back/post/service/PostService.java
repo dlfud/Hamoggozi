@@ -15,7 +15,7 @@ public class PostService implements PostServiceI {
     private PostDao postDao;
 
     @Override
-    public List<PostBean> getPostBean(PostBean postBean) throws Exception {
+    public List<PostBean> getPostList(PostBean postBean) throws Exception {
         return postDao.getPostList(postBean);
     }
 

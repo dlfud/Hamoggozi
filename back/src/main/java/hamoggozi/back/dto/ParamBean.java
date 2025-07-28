@@ -1,35 +1,26 @@
 package hamoggozi.back.dto;
 
-public class NoticeBean extends ParamBean {
-    private int uid;
-    private int groupUid;
-    private String content;
+public class ParamBean {
+    private int searchCount;
+    private String searchWord;
+
     private int insertBy;
     private String insertDate;
     private int updateBy;
     private String updateDate;
 
-    private int userUid;
-
-    public int getUid() {
-        return uid;
+    public int getSearchCount() {
+        return searchCount;
     }
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setSearchCount(int searchCount) {
+        this.searchCount = searchCount;
     }
 
-    public int getGroupUid() {
-        return groupUid;
+    public String getSearchWord() {
+        return searchWord;
     }
-    public void setGroupUid(int groupUid) {
-        this.groupUid = groupUid;
-    }
-
-    public String getContent() {
-        return content;
-    }
-    public void setContent(String content) {
-        this.content = content;
+    public void setSearchWord(String searchWord) {
+        this.searchWord = searchWord;
     }
 
     public int getInsertBy() {
@@ -58,12 +49,5 @@ public class NoticeBean extends ParamBean {
     }
     public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
-    }
-
-    public int getUserUid() {
-        return userUid;
-    }
-    public void setUserUid(int userUid) {
-        this.userUid = userUid;
     }
 }

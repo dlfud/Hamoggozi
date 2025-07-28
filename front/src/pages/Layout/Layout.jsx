@@ -15,7 +15,9 @@ const Layout = () => {
         const res = await axios.post("/group/getGroupInfo", {groupUid: groupUid, userUid: userInfo.uid});
         if(res.data.success){
           setGroupInfo(res.data.result)
-          setUserInfo({...userInfo, auth: res.data.result.auth})
+          if (userInfo.auth !== res.data.result.auth) {
+            setUserInfo({ ...userInfo, auth: res.data.result.auth });
+          }
         }else{
           alert("인증되지 않은 사용자입니다.");
           navigate("/");
@@ -27,7 +29,7 @@ const Layout = () => {
     };
 
     fetchMain();
-  }, [navigate]);
+  }, [groupUid]);
 
   const goGroup = (groupUid) => {
     navigate(`/main/${groupUid}`)

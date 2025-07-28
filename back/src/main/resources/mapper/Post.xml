@@ -8,12 +8,19 @@
         SELECT P.UID, P.GROUPUID, P.USERUID, P.TITLE, P.CONTENT, P.CATEGORY, P.UPDATEDATE
         FROM POST P
         WHERE P.USERUID = #{userUid} AND P.GROUPUID = #{groupUid}
-        <where>
-            <if test="category != null">
-                AND P.CATEGORY = #{category}
-            </if>
-        </where>
+        <if test="category != null and category != 'All'">
+            AND P.CATEGORY = #{category}
+        </if>
+        <if test="searchWord != null and searchWord != ''">
+            AND (
+                P.TITLE LIKE CONCAT('%', #{searchWord}, '%')
+                OR P.CONTENT LIKE CONCAT('%', #{searchWord}, '%')
+            )
+        </if>
         ORDER BY UPDATEDATE DESC
+        <if test="searchCount != null">
+            LIMIT #{searchCount}
+        </if>
     </select>
 
     <select id="getPostDetail" resultType="PostBean">

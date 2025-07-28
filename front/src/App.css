@@ -305,6 +305,12 @@
   padding: 0 20px;
 }
 
+.searchBtn{
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 .rowCountSelect{
   width: 85px;
   height: 40px;

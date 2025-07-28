@@ -6,7 +6,7 @@ import hamoggozi.back.dto.UserBean;
 import java.util.List;
 
 public interface PostServiceI {
-    List<PostBean> getPostBean(PostBean postBean) throws Exception;
+    List<PostBean> getPostList(PostBean postBean) throws Exception;
 
     PostBean getPostDetail(PostBean postBean) throws Exception;
 

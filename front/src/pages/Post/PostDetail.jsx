@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import ReactMarkdown from 'react-markdown';
+import { useGroup } from '../../util/GroupContext';
 import { useNavigate, useParams } from "react-router-dom";
 
 const PostDetail = () => {
+  const { userInfo, groupInfo } = useGroup();    
   const { uid } = useParams();
   const [postData, setPostData] = useState({})
   const [markdown, setMarkdown] = useState('');
@@ -11,20 +13,20 @@ const PostDetail = () => {
 
   useEffect(() => {
     getPostDetail()
-  }, [uid]);
+  }, [groupInfo.uid, userInfo.uid, uid]);
 
   const getPostDetail = async () => {
     try {
-      const res = await axios.post("/post/getPostDetail", {uid: uid});
+      const res = await axios.post("/post/getPostDetail", {uid: uid, groupUid: groupInfo.uid, userUid: userInfo.uid});
       setPostData(res.data)
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");
-      navigate("/");
+      navigate(`/main/${groupInfo.uid}`);
     }
   }
 
   const goPostList = () => {
-    navigate("/");
+    navigate(`/main/${groupInfo.uid}`);
   }
 
   const updatePost = () => {
@@ -36,11 +38,11 @@ const PostDetail = () => {
       const res = await axios.post("/post/deletePost", {uid: uid});
       if(res.data.code == '200'){
         alert("삭제 되었습니다.")
-        navigate("/main")
+        navigate(`/main/${groupInfo.uid}`)
       }
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");
-      navigate("/");
+      navigate(`/main/${groupInfo.uid}`);
     }
   }
 
