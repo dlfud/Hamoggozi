@@ -13,6 +13,5 @@ public interface GroupDao {
     void insertGroup(GroupBean groupBean) throws Exception;
     void insertGroupUser(GroupUserBean groupUserBean) throws Exception;
 
-    int checkGroupUser(GroupUserBean groupUserBean) throws Exception;
     GroupBean getGroupInfo(GroupUserBean groupUserBean) throws Exception;
 }

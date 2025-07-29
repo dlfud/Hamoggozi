@@ -21,14 +21,11 @@ function App() {
           <Route path="/groupList" element={< GroupList/>} />
           <Route path="/createGroup" element={< CreateGroup />} />
 
-          <Route path="/main/:groupUid" element={<Layout />}>   
+          <Route path="/group/:groupUid" element={<Layout />}>   
             <Route index element={<Main />} />
-          </Route>
-
-          <Route path="/post" element={<Layout />}>   
-            <Route path="postDetail/:uid" element={<PostDetail />} />
-            <Route path="postInsertPage" element={<PostInsert />} />
-            <Route path="postUpdatePage/:uid" element={<PostUpdate />} />
+            <Route path="post/postDetail/:postUid" element={<PostDetail />} />
+            <Route path="post/postInsertPage" element={<PostInsert />} />
+            <Route path="post/postUpdatePage/:postUid" element={<PostUpdate />} />
           </Route>
         </Route>
       </Routes>

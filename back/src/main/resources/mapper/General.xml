@@ -31,4 +31,28 @@
         DELETE FROM FILE
         WHERE URL = #{url}
     </delete>
+
+    <select id="checkAuth">
+        SELECT AUTH
+        FROM GROUPUSER
+        WHERE GROUPUID = #{groupUid} AND USERUID = #{userUid}
+    </select>
+
+    <select id="checkGroupUser" resultType="int">
+        SELECT COUNT(*)
+        FROM GROUPUSER GU
+        WHERE GU.GROUPUID = #{groupUid} AND GU.USERUID = #{userUid}
+    </select>
+
+    <select id="checkGroupPost">
+        SELECT COUNT(*)
+        FROM POST
+        WHERE UID = #{postUid} AND GROUPUID = #{groupUid}
+    </select>
+
+    <select id="checkPostUser">
+        SELECT COUNT(*)
+        FROM POST
+        WHERE UID = #{postUid} AND USERUID = #{userUid}
+    </select>
 </mapper>

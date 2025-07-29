@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios"; 
+import { routes } from '../util/Route'; 
 import { useNavigate } from "react-router-dom";
 import { useGroup } from '../util/GroupContext';
 import '../Common.css';
@@ -16,7 +17,7 @@ const CreateGroup = () => {
             const response = await axios.post('/group/insertGroup', {groupId: groupId, groupName: groupName, insertBy: userInfo.uid, updateBy: userInfo.uid});
 
             alert(response.data); 
-            navigate("/groupList")
+            navigate(routes.groupList())
         } catch (error) {
             console.error(error);
             alert('그룹 생성 실패');
@@ -24,7 +25,7 @@ const CreateGroup = () => {
     }
 
     const goBack = () => {
-        navigate("/groupList")
+        navigate(routes.groupList())
     }
 
   return (

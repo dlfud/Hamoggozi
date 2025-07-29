@@ -23,12 +23,6 @@
         VALUES (#{groupUid}, #{userUid}, #{auth})
     </insert>
 
-    <select id="checkGroupUser" resultType="int">
-        SELECT COUNT(*)
-        FROM GROUPUSER GU
-        WHERE GU.GROUPUID = #{groupUid} AND GU.USERUID = #{userUid}
-    </select>
-
     <select id="getGroupInfo" resultType="GroupBean">
         SELECT G.UID, G.GROUPID, G.GROUPNAME, GU.AUTH
         FROM `GROUP` G JOIN GROUPUSER GU ON(G.UID = GU.GROUPUID)

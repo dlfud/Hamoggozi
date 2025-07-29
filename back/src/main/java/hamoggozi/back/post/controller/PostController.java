@@ -57,24 +57,30 @@ public class PostController {
 
     @RequestMapping(value="/post/getPostDetail", method=RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> getPostDetail(@RequestHeader("Authorization") String authHeader, @RequestBody PostBean postBean) throws Exception {
-        GroupUserBean groupUserBean = new GroupUserBean();
-        groupUserBean.setGroupUid(postBean.getGroupUid());
-        groupUserBean.setUserUid(postBean.getUserUid());
-        int result = groupService.checkGroupUser(groupUserBean);
+        String token = authHeader.replace("Bearer ", "");
+        Claims claims = jwtUtil.parseToken(token);
+        int uid = claims.get("uid", Integer.class);
+
+        int result = generalService.checkGroupUser(postBean.getGroupUid(), uid);
+        int postResult = generalService.checkGroupPost(postBean.getGroupUid(), postBean.getUid());
 
         Map<String, Object> resultMap = new HashMap<>();
-        if(result > 0) {
+        if(postResult < 1){
+            resultMap.put("code", "200");
+            resultMap.put("status", "fail");
+            resultMap.put("message", "그룹에 속한 게시글에 아닙니다.");
+        }else if(result < 1){
+            resultMap.put("code", "200");
+            resultMap.put("status", "fail");
+            resultMap.put("message", "게시글을 확인 할 수 없습니다.");
+        }else{
             PostBean postDetail = postService.getPostDetail(postBean);
-            String token = authHeader.replace("Bearer ", "");
             String userId = jwtUtil.getUsername(token);
             postDetail.setUserName(userId);
             postDetail.setContent(htmlToMarkdown(postDetail.getContent()));
             resultMap.put("code", "200");
             resultMap.put("status", "success");
             resultMap.put("result", postDetail);
-        }else{
-            resultMap.put("code", "200");
-            resultMap.put("status", "fail");
         }
 
         return ResponseEntity.ok().body(resultMap);
@@ -87,35 +93,44 @@ public class PostController {
         String token = authHeader.replace("Bearer ", "");
         Claims claims = jwtUtil.parseToken(token);
         int uid = claims.get("uid", Integer.class);
-        postBean.setUserUid(uid);
-        postBean.setInsertBy(uid);
-        postBean.setUpdateBy(uid);
 
-        //임시폴더 영구폴더로 이동 및 내용 url치환
-        for(String fileUrl: postBean.getMoveFile()){
-            String moveUrl = fileUtil.moveFile(fileUrl);
-            postBean.setContent(postBean.getContent().replaceAll(fileUrl, moveUrl));
+        int resultPost = generalService.checkGroupUser(postBean.getGroupUid(), uid);
 
-            FileBean fileBean = new FileBean();
-            String url = fileUtil.extractFileUrl(moveUrl);
-            fileBean.setFileName(url.split("/")[2].split("_")[1]);
-            fileBean.setPublickey(url.split("/")[2].split("_")[0]);
-            fileBean.setSaveName(url.split("/")[2]);
-            fileBean.setUrl(url);
-            generalService.insertFile(fileBean);
-        }
-        //임시폴더에서 삭제한 이미지 삭제
-        for(String fileUrl: postBean.getTempDeleteFile()){
-            fileUtil.deleteTempFile(fileUrl);
-        }
+        if(resultPost > 0) {
+            postBean.setUserUid(uid);
+            postBean.setInsertBy(uid);
+            postBean.setUpdateBy(uid);
 
-        String sanitizedContent = Jsoup.clean(postBean.getContent(), Safelist.basicWithImages());
-        postBean.setContent(sanitizedContent);
-        int result = postService.insertPost(postBean);
+            //임시폴더 영구폴더로 이동 및 내용 url치환
+            for (String fileUrl : postBean.getMoveFile()) {
+                String moveUrl = fileUtil.moveFile(fileUrl);
+                postBean.setContent(postBean.getContent().replaceAll(fileUrl, moveUrl));
 
-        if(result > 0) {
-            resultMap.put("status", "success");
+                FileBean fileBean = new FileBean();
+                String url = fileUtil.extractFileUrl(moveUrl);
+                fileBean.setFileName(url.split("/")[2].split("_")[1]);
+                fileBean.setPublickey(url.split("/")[2].split("_")[0]);
+                fileBean.setSaveName(url.split("/")[2]);
+                fileBean.setUrl(url);
+                generalService.insertFile(fileBean);
+            }
+            //임시폴더에서 삭제한 이미지 삭제
+            for (String fileUrl : postBean.getTempDeleteFile()) {
+                fileUtil.deleteTempFile(fileUrl);
+            }
+
+            String sanitizedContent = Jsoup.clean(postBean.getContent(), Safelist.basicWithImages());
+            postBean.setContent(sanitizedContent);
+            int result = postService.insertPost(postBean);
+
+            if (result > 0) {
+                resultMap.put("status", "success");
+                resultMap.put("code", "200");
+            }
+        }else{
             resultMap.put("code", "200");
+            resultMap.put("status", "fail");
+            resultMap.put("message", "그룹에 속하지 않았습니다.");
         }
         return ResponseEntity.ok().body(resultMap);
     }
@@ -127,67 +142,89 @@ public class PostController {
         String token = authHeader.replace("Bearer ", "");
         Claims claims = jwtUtil.parseToken(token);
         int uid = claims.get("uid", Integer.class);
-        postBean.setUserUid(uid);
-        postBean.setInsertBy(uid);
-        postBean.setUpdateBy(uid);
 
-        //영구 폴더에서 이미지 삭제
-        for(String fileUrl: postBean.getDeleteFile()){
-            fileUtil.deleteFile(fileUrl);
+        int resultPost = generalService.checkPostUser(postBean.getUid(), uid);
 
-            String url = fileUtil.extractFileUrl(fileUrl);
-            generalService.deleteFile(url);
-        }
-        //임시폴더 영구폴더로 이동 및 내용 url치환
-        for(String fileUrl: postBean.getMoveFile()){
-            String moveUrl = fileUtil.moveFile(fileUrl);
-            postBean.setContent(postBean.getContent().replaceAll(fileUrl, moveUrl));
+        if(resultPost > 0){
+            postBean.setUserUid(uid);
+            postBean.setInsertBy(uid);
+            postBean.setUpdateBy(uid);
 
-            FileBean fileBean = new FileBean();
-            String url = fileUtil.extractFileUrl(moveUrl);
-            fileBean.setFileName(url.split("/")[2].split("_")[1]);
-            fileBean.setPublickey(url.split("/")[2].split("_")[0]);
-            fileBean.setSaveName(url.split("/")[2]);
-            fileBean.setUrl(url);
-            generalService.insertFile(fileBean);
-        }
-        //임시폴더에서 삭제한 이미지 삭제
-        for(String fileUrl: postBean.getTempDeleteFile()){
-            fileUtil.deleteTempFile(fileUrl);
-        }
+            //영구 폴더에서 이미지 삭제
+            for(String fileUrl: postBean.getDeleteFile()){
+                fileUtil.deleteFile(fileUrl);
 
-        String sanitizedContent = Jsoup.clean(postBean.getContent(), Safelist.basicWithImages());
-        postBean.setContent(sanitizedContent);
-        int result = postService.updatePost(postBean);
-        if(result > 0) {
-            resultMap.put("status", "success");
+                String url = fileUtil.extractFileUrl(fileUrl);
+                generalService.deleteFile(url);
+            }
+            //임시폴더 영구폴더로 이동 및 내용 url치환
+            for(String fileUrl: postBean.getMoveFile()){
+                String moveUrl = fileUtil.moveFile(fileUrl);
+                postBean.setContent(postBean.getContent().replaceAll(fileUrl, moveUrl));
+
+                FileBean fileBean = new FileBean();
+                String url = fileUtil.extractFileUrl(moveUrl);
+                fileBean.setFileName(url.split("/")[2].split("_")[1]);
+                fileBean.setPublickey(url.split("/")[2].split("_")[0]);
+                fileBean.setSaveName(url.split("/")[2]);
+                fileBean.setUrl(url);
+                generalService.insertFile(fileBean);
+            }
+            //임시폴더에서 삭제한 이미지 삭제
+            for(String fileUrl: postBean.getTempDeleteFile()){
+                fileUtil.deleteTempFile(fileUrl);
+            }
+
+            String sanitizedContent = Jsoup.clean(postBean.getContent(), Safelist.basicWithImages());
+            postBean.setContent(sanitizedContent);
+            int result = postService.updatePost(postBean);
+            if(result > 0) {
+                resultMap.put("status", "success");
+                resultMap.put("code", "200");
+            }
+        }else{
+            resultMap.put("status", "fail");
             resultMap.put("code", "200");
+            resultMap.put("message", "수정 권한이 없습니다.");
         }
+
         return ResponseEntity.ok().body(resultMap);
     }
 
     @RequestMapping(value="/post/deletePost", method=RequestMethod.POST)
-    public ResponseEntity<Map<String, String>> deletePost(@RequestBody PostBean postBean) throws Exception {
+    public ResponseEntity<Map<String, String>> deletePost(@RequestHeader("Authorization") String authHeader, @RequestBody PostBean postBean) throws Exception {
         Map<String, String> resultMap = new HashMap<>();
 
-        PostBean postDetail = postService.getPostDetail(postBean);
+        String token = authHeader.replace("Bearer ", "");
+        Claims claims = jwtUtil.parseToken(token);
+        int uid = claims.get("uid", Integer.class);
 
-        String regex = "<img[^>]+src=[\"']([^\">']*images[^\">']*)[\"']";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(postDetail.getContent());
-        while (matcher.find()) {
-            String url = matcher.group(1);
-            String fileUrl = fileUtil.extractFileUrl(url);
-            //폴더에서 이미지 삭제
-            fileUtil.deleteFile(url);
-            //DB에서 정보 삭제
-            generalService.deleteFile(fileUrl);
-        }
+        int resultPost = generalService.checkPostUser(postBean.getUid(), uid);
 
-        int result = postService.deletePost(postBean);
-        if(result > 0) {
+        if(resultPost > 0) {
+            PostBean postDetail = postService.getPostDetail(postBean);
+
+            String regex = "<img[^>]+src=[\"']([^\">']*images[^\">']*)[\"']";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(postDetail.getContent());
+            while (matcher.find()) {
+                String url = matcher.group(1);
+                String fileUrl = fileUtil.extractFileUrl(url);
+                //폴더에서 이미지 삭제
+                fileUtil.deleteFile(url);
+                //DB에서 정보 삭제
+                generalService.deleteFile(fileUrl);
+            }
+
+            int result = postService.deletePost(postBean);
+            if (result > 0) {
+                resultMap.put("status", "success");
+                resultMap.put("code", "200");
+            }
+        }else{
             resultMap.put("status", "success");
             resultMap.put("code", "200");
+            resultMap.put("message", "삭제 권한이 없습니다.");
         }
         return ResponseEntity.ok().body(resultMap);
     }

@@ -2,11 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "../../api/axios";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { routes } from '../../util/Route'; 
+import { useGroup } from '../../util/GroupContext';
 import { useNavigate, useParams } from "react-router-dom";
 import { MyCustomUploadAdapterPlugin, extractTempImages
         , uploadedTempImages, deleteTempImages } from '../../util/UploadPostFileUtil';
 
 const InsertPost = ({ defaultCategory = 'ALL' }) => {
+  const { userInfo, groupInfo } = useGroup();    
   const [category, setCategory] = useState()
   const [title, setTitle] = useState()
   const [content, setContent] = useState()
@@ -32,14 +35,16 @@ const InsertPost = ({ defaultCategory = 'ALL' }) => {
       });
 
       const res = await axios.post("/post/insertPost", {category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: imagesToDelete});
-      if(res.data.code === '200'){
+      if(res.data.status === 'success'){
         uploadedTempImages.clear();
-        navigate(`/`)
+        navigate(routes.main(groupInfo.uid))
+      }else{
+        alert(res.data.message)
       }
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");
       uploadedTempImages.clear();
-      navigate("/");
+      navigate(routes.groupList());
     }
   }
 
@@ -48,7 +53,7 @@ const InsertPost = ({ defaultCategory = 'ALL' }) => {
 
     if(response.code === '200'){
       uploadedTempImages.clear();
-      navigate(`/main`)
+      navigate(routes.main(groupInfo.uid))
     }
   }
 

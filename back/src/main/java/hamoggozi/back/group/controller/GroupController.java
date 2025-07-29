@@ -4,9 +4,11 @@ import hamoggozi.back.dto.GroupBean;
 import hamoggozi.back.dto.GroupUserBean;
 import hamoggozi.back.dto.NoticeBean;
 import hamoggozi.back.dto.UserBean;
+import hamoggozi.back.general.service.GeneralServiceI;
 import hamoggozi.back.group.service.GroupServiceI;
 import hamoggozi.back.jwt.JwtUtil;
 import hamoggozi.back.jwt.RedisService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,8 @@ public class GroupController {
     private JwtUtil jwtUtil;
     @Autowired
     private GroupServiceI groupService;
+    @Autowired
+    private GeneralServiceI generalService;
 
     @RequestMapping(value="/group/getGroupList", method=RequestMethod.POST)
     public ResponseEntity<List<GroupBean>> getGroupList(@RequestBody UserBean userBean) throws Exception {
@@ -33,17 +37,21 @@ public class GroupController {
     }
 
     @RequestMapping(value="/group/getGroupInfo", method=RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> getGroupInfo(@RequestBody GroupUserBean groupUserBean) throws Exception {
+    public ResponseEntity<Map<String, Object>> getGroupInfo(@RequestHeader("Authorization") String authHeader, @RequestBody GroupUserBean groupUserBean) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
 
-        int result = groupService.checkGroupUser(groupUserBean);
+        String token = authHeader.replace("Bearer ", "");
+        Claims claims = jwtUtil.parseToken(token);
+        int uid = claims.get("uid", Integer.class);
+        int result = generalService.checkGroupUser(groupUserBean.getGroupUid(), uid);
         if(result > 0){
-            resultMap.put("success", true);
+            resultMap.put("status", "success");
             resultMap.put("code", "200");
             resultMap.put("result", groupService.getGroupInfo(groupUserBean));
         }else{
-            resultMap.put("success", false);
+            resultMap.put("status", "fail");
             resultMap.put("code", "200");
+            resultMap.put("message", "그룹에 속하지 않은 사용자 입니다.");
         }
 
         return ResponseEntity.ok().body(resultMap);

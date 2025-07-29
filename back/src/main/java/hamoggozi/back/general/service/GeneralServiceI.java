@@ -11,4 +11,9 @@ public interface GeneralServiceI {
 
     void insertFile(FileBean fileBean) throws Exception;
     void deleteFile(String url) throws Exception;
+
+    String checkAuth(int groupUid, int userUid) throws Exception;
+    int checkGroupUser(int groupUid, int userUid) throws Exception;
+    int checkGroupPost(int groupUid, int postUid) throws Exception;
+    int checkPostUser(int postUid, int userUid) throws Exception;
 }

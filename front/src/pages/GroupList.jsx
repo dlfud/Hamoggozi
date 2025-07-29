@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios"; 
+import { routes } from '../util/Route'; 
 import { useNavigate } from "react-router-dom";
 import { useGroup } from '../util/GroupContext';
 import '../Common.css';
@@ -34,11 +35,11 @@ const GroupList = () => {
   };
 
   const createGroup = () => {
-    navigate("/createGroup")
+    navigate(routes.createGroup())
   }
 
   const goGroup = (groupUid) => {
-    navigate(`/main/${groupUid}`)
+    navigate(routes.main(groupUid))
   }
 
   return (

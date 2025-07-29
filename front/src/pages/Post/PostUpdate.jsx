@@ -3,6 +3,8 @@ import axios from "../../api/axios";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ReactMarkdown from 'react-markdown';
+import { routes } from '../../util/Route'; 
+import { useGroup } from '../../util/GroupContext';
 import { marked } from 'marked';
 import { useNavigate, useParams } from "react-router-dom";
 import { MyCustomUploadAdapterPlugin, extractTempImages
@@ -10,7 +12,8 @@ import { MyCustomUploadAdapterPlugin, extractTempImages
         extractImages} from '../../util/UploadPostFileUtil';
 
 const UpdatePost = ({ defaultCategory = 'ALL' }) => {
-  const { uid } = useParams();
+  const { userInfo, groupInfo } = useGroup();    
+  const { groupUid, postUid } = useParams();
   const [postData, setPostData] = useState({})
   const [category, setCategory] = useState()
   const [title, setTitle] = useState()
@@ -25,20 +28,24 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.post("/post/getPostDetail", {uid: uid});
-        const convertedContent = marked(res.data.content);
-        setPostData({ ...res.data, content: convertedContent });
+        const res = await axios.post("/post/getPostDetail", {uid: postUid, groupUid: groupInfo.uid});
+        if(res.data.status === 'success'){
+          const convertedContent = marked(res.data.result.content);
+          setPostData({ ...res.data.result, content: convertedContent });
 
-        const imgTags = extractImages(convertedContent);
-        setInitialImages(imgTags);
+          const imgTags = extractImages(convertedContent);
+          setInitialImages(imgTags);
+        }else{
+          alert(res.data.message)
+        }
       } catch (err) {
         alert("인증되지 않은 사용자입니다.");
-        navigate("/");
+        navigate(routes.groupList());
       }
     };
 
     fetchPost();
-  }, [uid]);
+  }, [postUid]);
 
   useEffect(() => {
     setTitle(postData.title)
@@ -62,15 +69,18 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
         }
       });
 
-      const res = await axios.post("/post/updatePost", {uid: uid, category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: tempImagesToDelete, deleteFile: imagesToDelete});
-      if(res.data.code === '200'){
+      const res = await axios.post("/post/updatePost", {uid: postUid, groupUid: groupInfo.uid, category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: tempImagesToDelete, deleteFile: imagesToDelete});
+      if(res.data.status === 'success'){
         uploadedTempImages.clear();
-        navigate(`/`)
+        navigate(routes.main(groupInfo.uid));
+      }else{
+        alert(res.data.message)
+        navigate(routes.main(groupInfo.uid));
       }
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");
       uploadedTempImages.clear();
-      navigate("/");
+      navigate(routes.groupList());
     }
   }
 
@@ -79,7 +89,7 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
     
     if(response.code === '200'){
       uploadedTempImages.clear();
-      navigate(`/post/postDetail/${uid}`)
+      navigate(routes.postDetail(groupInfo.uid, postUid))
     }
   }
 
@@ -106,7 +116,7 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
       />
       <button onClick={updatePost}>수정하기</button>
       <button onClick={cancelUpdatePost}>취소</button>
-      <p>UID: {uid}</p>
+      <p>UID: {postUid}</p>
     </div>
   );
 };

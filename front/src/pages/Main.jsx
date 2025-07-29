@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 import { useGroup } from '../util/GroupContext';
+import { routes } from '../util/Route'; 
 import { useNavigate, useParams } from "react-router-dom";
 
 const Main = () => {
@@ -51,7 +52,11 @@ const Main = () => {
 
      try {
       const res = await axios.post("/notice/saveNotice", {userUid: userInfo.uid, uid: noticeUid, groupUid: groupInfo.uid, content: noticeContent});
-      if(res.data.code === '200') getNotice()
+      if(res.data.status === 'success') {
+        getNotice()
+      }else{
+        alert(res.data.message);
+      }
     } catch (err) {
       console.error("공지 업데이트 실패", err);
     }
@@ -78,11 +83,11 @@ const Main = () => {
   }
 
   const goPostDetail = (postUid) => {
-    navigate(`/post/postDetail/${postUid}`)
+    navigate(routes.postDetail(groupInfo.uid, postUid))
   }
 
    const insertPost = () => {
-    navigate("/post/postInsertPage")
+    navigate(routes.postInsert(groupInfo.uid))
   }
 
   return (

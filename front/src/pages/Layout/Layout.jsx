@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "../../api/axios";
 import { Outlet } from 'react-router-dom';
+import { routes } from '../../util/Route'; 
 import { useGroup } from '../../util/GroupContext';
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -13,26 +14,28 @@ const Layout = () => {
     const fetchMain = async () => {
       try {
         const res = await axios.post("/group/getGroupInfo", {groupUid: groupUid, userUid: userInfo.uid});
-        if(res.data.success){
+        if(res.data.status === 'success'){
           setGroupInfo(res.data.result)
           if (userInfo.auth !== res.data.result.auth) {
             setUserInfo({ ...userInfo, auth: res.data.result.auth });
           }
         }else{
-          alert("인증되지 않은 사용자입니다.");
-          navigate("/");
+          alert(res.data.message);
+          navigate(routes.groupList());
         }
       } catch (err) {
         alert("인증되지 않은 사용자입니다.");
-        navigate("/");
+        navigate(routes.groupList());
       }
     };
 
-    fetchMain();
+    if (groupUid) {
+      fetchMain();
+    }
   }, [groupUid]);
 
   const goGroup = (groupUid) => {
-    navigate(`/main/${groupUid}`)
+    navigate(routes.main(groupUid))
   }
   
   const handleLogout = () => {

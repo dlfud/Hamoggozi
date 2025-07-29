@@ -32,11 +32,6 @@ public class GroupService implements GroupServiceI {
     }
 
     @Override
-    public int checkGroupUser(GroupUserBean groupUserBean) throws Exception {
-        return groupDao.checkGroupUser(groupUserBean);
-    }
-
-    @Override
     public GroupBean getGroupInfo(GroupUserBean groupUserBean) throws Exception {
         return groupDao.getGroupInfo(groupUserBean);
     }
