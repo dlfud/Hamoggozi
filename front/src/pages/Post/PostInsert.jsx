@@ -34,7 +34,8 @@ const InsertPost = ({ defaultCategory = 'ALL' }) => {
         }
       });
 
-      const res = await axios.post("/post/insertPost", {category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: imagesToDelete});
+      const res = await axios.post("/post/insertPost", {groupUid: groupInfo.uid, category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: imagesToDelete});
+      console.log(res.data)
       if(res.data.status === 'success'){
         uploadedTempImages.clear();
         navigate(routes.main(groupInfo.uid))

@@ -101,8 +101,6 @@ springboot 세팅 (3.5.3)
 
 - Category관련 설정 및 검색 추가
 
-- post CURD 기능에 group 추가
-
 - post detail 화면 진입 시 데이터 안나옴
 
 2025-07-29(화)
