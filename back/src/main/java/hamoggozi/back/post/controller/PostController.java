@@ -44,12 +44,14 @@ public class PostController {
     private FileUtil fileUtil;
 
     @RequestMapping(value="/post/getPostList", method=RequestMethod.POST)
-    public ResponseEntity<List<PostBean>> getPostList(@RequestBody PostBean postBean) throws Exception {
-        List<PostBean> postList = postService.getPostList(postBean);
-        return ResponseEntity.ok().body(postList);
+    public ResponseEntity<Map<String, Object>> getPostList(@RequestBody PostBean postBean) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("postList", postService.getPostList(postBean));
+        resultMap.put("totalCnt", postService.getPostListCount(postBean));
+        return ResponseEntity.ok().body(resultMap);
     }
 
-    //html To markdown
+    //html To markdowntotalCnt
     public String htmlToMarkdown(String html) {
         FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
         return converter.convert(html);

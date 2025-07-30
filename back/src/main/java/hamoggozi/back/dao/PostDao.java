@@ -9,6 +9,7 @@ import java.util.List;
 public interface PostDao {
 
     List<PostBean> getPostList(PostBean postBean) throws Exception;
+    int getPostListCount(PostBean postBean) throws Exception;
 
     PostBean getPostDetail(PostBean postBean) throws Exception;
 

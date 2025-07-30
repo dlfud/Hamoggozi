@@ -17,6 +17,9 @@ const Main = () => {
   const [category, setCategory] = useState('All')
   const [searchWord, setSearchWord] = useState()
   const [searchCount, setSearchCount] = useState(10)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalCount, setTotalCount] = useState()
   
   const navigate = useNavigate();
 
@@ -29,7 +32,7 @@ const Main = () => {
     }
 
     getNotice();
-    getPostList();
+    getPostList(1);
   }, [groupInfo]);
 
   //notice
@@ -68,18 +71,24 @@ const Main = () => {
   }
 
   //post
-  const getPostList = async () => {
-    try {
-      const res = await axios.post("/post/getPostList", {userUid: userInfo.uid, groupUid: groupInfo.uid, category: category, searchWord: searchWord, searchCount: searchCount});
-      setPostList(res.data);
-    } catch (err) {
-      console.error("데이터 가져오기 실패", err);
-    }
-  }
+  useEffect(() => {
+    getPostList(1);
+  }, [searchCount]);
 
   const changeSearchCount = (e) => {
     setSearchCount(Number(e.target.value))
-    getPostList()
+  }
+
+  const getPostList = async (page) => {
+    try {
+      setCurrentPage(page)
+      let offset = (page - 1) * searchCount
+      const res = await axios.post("/post/getPostList", {userUid: userInfo.uid, groupUid: groupInfo.uid, category: category, searchWord: searchWord, searchCount: searchCount, offset: offset});
+      setPostList(res.data.postList);
+      setTotalCount(res.data.totalCnt)
+    } catch (err) {
+      console.error("데이터 가져오기 실패", err);
+    }
   }
 
   const goPostDetail = (postUid) => {
@@ -159,6 +168,12 @@ const Main = () => {
       </div>
       <div className="postDiv">
         <table border="1">
+          <colgroup>
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '30%' }} />
+            <col style={{ width: '30%' }} />
+            <col style={{ width: '30%' }} />
+          </colgroup>
           <thead>
             <tr>
               <th>UID</th>
@@ -170,14 +185,25 @@ const Main = () => {
           <tbody>
             {postList.map(item => (
               <tr key={item.uid}>
-                <td>{item.uid}</td>
-                <td onClick={() => goPostDetail(item.uid)}>{item.title}</td>
-                <td>{item.category}</td>
-                <td>{item.updateDate}</td>
+                <td className="textCenter">{item.uid}</td>
+                <td className="cursorPointer" onClick={() => goPostDetail(item.uid)}>{item.title}</td>
+                <td className="textCenter">{item.category}</td>
+                <td className="textCenter">{item.updateDate}</td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="paging textCenter">
+        {Array.from({ length: Math.ceil(totalCount / searchCount) }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => getPostList(i + 1)}
+            className={`pageBtn${currentPage === i + 1 ? " active" : ""}`}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
     </div>
   );

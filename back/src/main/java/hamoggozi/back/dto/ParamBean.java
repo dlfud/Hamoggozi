@@ -3,6 +3,7 @@ package hamoggozi.back.dto;
 public class ParamBean {
     private int searchCount;
     private String searchWord;
+    private int offset;
 
     private int insertBy;
     private String insertDate;
@@ -21,6 +22,13 @@ public class ParamBean {
     }
     public void setSearchWord(String searchWord) {
         this.searchWord = searchWord;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 
     public int getInsertBy() {

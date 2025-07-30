@@ -46,6 +46,41 @@ textarea {
   box-sizing: border-box;
 }
 
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: none !important;
+}
+
+th, td {
+  padding: 0;
+  margin: 0;
+  border: none;
+  text-align: left;
+  vertical-align: top;
+}
+
+thead{
+  border-bottom: 1px solid gray;
+}
+
+thead th{
+  text-align: center;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;      /* 부모 폰트 상속 */
+  color: inherit;     /* 부모 색상 상속 */
+  cursor: pointer;
+}
+
+
+
 
 .container{
   box-sizing: border-box;
@@ -93,6 +128,10 @@ textarea {
 
 .cursorPointer{
   cursor: pointer !important;
+}
+
+.textCenter{
+  text-align: center !important;
 }
 
 .scrollbox{

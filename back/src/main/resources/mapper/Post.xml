@@ -18,8 +18,23 @@
             )
         </if>
         ORDER BY UPDATEDATE DESC
-        <if test="searchCount != null">
-            LIMIT #{searchCount}
+        <if test="searchCount != null and offset != null">
+            LIMIT #{searchCount} OFFSET #{offset}
+        </if>
+    </select>
+
+    <select id="getPostListCount">
+        SELECT COUNT(*)
+        FROM POST P
+        WHERE P.USERUID = #{userUid} AND P.GROUPUID = #{groupUid}
+        <if test="category != null and category != 'All'">
+            AND P.CATEGORY = #{category}
+        </if>
+        <if test="searchWord != null and searchWord != ''">
+            AND (
+                P.TITLE LIKE CONCAT('%', #{searchWord}, '%')
+                OR P.CONTENT LIKE CONCAT('%', #{searchWord}, '%')
+            )
         </if>
     </select>
 

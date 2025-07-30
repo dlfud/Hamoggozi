@@ -20,6 +20,11 @@ public class PostService implements PostServiceI {
     }
 
     @Override
+    public int getPostListCount(PostBean postBean) throws Exception {
+        return postDao.getPostListCount(postBean);
+    }
+
+    @Override
     public PostBean getPostDetail(PostBean postBean) throws Exception {
         return postDao.getPostDetail(postBean);
     }

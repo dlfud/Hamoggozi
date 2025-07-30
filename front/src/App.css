@@ -338,9 +338,23 @@
 .postDiv{
   width: 840px;
   height: auto;
-  min-height: 314px;
-  border: 1px solid #D47E22;
-  margin: 0 20px;
+  min-height: 270px;
+  margin: 10px 20px;
+  border: 2px solid #D47E22;
+  background: #ffffff80;
+}
+
+.pageBtn{
+  margin: 0 4px;
+  padding: 6px 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pageBtn.active{
+  color: #D47E22;
+  font-size: 18px;
 }
 
 /*oneDiary*/
