@@ -6,18 +6,31 @@ import { useGroup } from '../../util/GroupContext';
 import { useNavigate, useParams } from "react-router-dom";
 
 const Layout = () => {
-  const { userInfo, setUserInfo, groupList, groupInfo, setGroupInfo } = useGroup();    
+  const { userInfo, setUserInfo, groupList, setGroupList, groupInfo, setGroupInfo } = useGroup();    
   const { groupUid } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMain = async () => {
       try {
-        const res = await axios.post("/group/getGroupInfo", {groupUid: groupUid, userUid: userInfo.uid});
+        let userInfoRes = userInfo
+        
+        if(!userInfo){
+          let response = await axios.get("/getUserInfo");
+          userInfoRes = response.data
+          setUserInfo(userInfoRes)
+        }
+
+        if(!groupList || groupList.length == 0){
+          const response = await axios.post("/group/getGroupList", {uid: userInfoRes.uid});
+          setGroupList(response.data)
+        }
+
+        const res = await axios.post("/group/getGroupInfo", {groupUid: groupUid, userUid: userInfoRes.uid});
         if(res.data.status === 'success'){
           setGroupInfo(res.data.result)
-          if (userInfo.auth !== res.data.result.auth) {
-            setUserInfo({ ...userInfo, auth: res.data.result.auth });
+          if (userInfoRes.auth !== res.data.result.auth) {
+            setUserInfo({ ...userInfoRes, auth: res.data.result.auth });
           }
         }else{
           alert(res.data.message);
@@ -29,7 +42,7 @@ const Layout = () => {
       }
     };
 
-    if (groupUid) {
+    if(groupUid){
       fetchMain();
     }
   }, [groupUid]);

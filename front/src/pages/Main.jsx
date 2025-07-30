@@ -21,8 +21,8 @@ const Main = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userInfo?.auth || !groupUid) return;
-    if(userInfo.auth === "MANAGER"){
+    if (!groupInfo) return;
+    if(groupInfo.auth === "MANAGER"){
       setIsSettingNotice(true)
     }else{
       setIsSettingNotice(false)
@@ -30,7 +30,7 @@ const Main = () => {
 
     getNotice();
     getPostList();
-  }, [userInfo?.auth, groupInfo]);
+  }, [groupInfo]);
 
   //notice
   const getNotice = async () => {

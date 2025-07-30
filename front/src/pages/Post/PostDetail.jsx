@@ -13,16 +13,18 @@ const PostDetail = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if(!groupInfo || !userInfo) return
     getPostDetail()
-  }, [groupInfo?.uid, postUid]);
+  }, [groupInfo?.uid, userInfo?.uid, postUid]);
 
   const getPostDetail = async () => {
     try {
-      const res = await axios.post("/post/getPostDetail", {uid: postUid, groupUid: groupInfo.uid, userUid: userInfo.uid});
+      const res = await axios.post("/post/getPostDetail", {uid: postUid, groupUid: groupUid, userUid: userInfo.uid});
       if(res.data.status === 'success'){
         setPostData(res.data.result)
       }else{
         alert(res.data.message)
+        navigate(routes.main(groupUid));
       }
     } catch (err) {
       alert("인증되지 않은 사용자입니다.");
@@ -31,11 +33,11 @@ const PostDetail = () => {
   }
 
   const goPostList = () => {
-    navigate(routes.main(groupInfo.uid));
+    navigate(routes.main(groupUid));
   }
 
   const updatePost = () => {
-    navigate(routes.postUpdate(groupInfo.uid, postUid))
+    navigate(routes.postUpdate(groupUid, postUid))
   }
 
   const deletePost = async () => {
