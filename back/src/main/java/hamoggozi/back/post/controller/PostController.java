@@ -51,7 +51,7 @@ public class PostController {
         return ResponseEntity.ok().body(resultMap);
     }
 
-    //html To markdowntotalCnt
+    //html To markdown
     public String htmlToMarkdown(String html) {
         FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
         return converter.convert(html);
