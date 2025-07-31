@@ -253,8 +253,28 @@
   width: 300px;
   height: auto;
   border: 2px solid #D47E22;
+  border-radius: 8px;
+  overflow: hidden;
   margin: 10px auto;
 }
+
+.menu li {
+  border-bottom: 1px solid #eee;
+}
+
+.menu button {
+  display: block;
+  padding: 12px 16px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.menu button:hover {
+  background-color: #ececec;
+  color: #007aff;
+}
+
 
 /*오른쪽 content*/
 
@@ -357,80 +377,57 @@
   font-size: 18px;
 }
 
-/*oneDiary*/
-.oneDiaryDiv{
-  width: 860px;
-  height: auto;
-  background-color: #FAEAD3;
-  margin: 30px 10px;
+
+/*setting category*/
+.category-manager {
+  max-width: 600px;
+  margin: 30px auto;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-.oneDiaryList{
-  width: 840px;
-  height: 110px;
-  background-color: #ffffff80;
-  margin: 0 10px;
-  padding: 0 20px;
+h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
 }
 
-.oneDiaryInfo{
-  margin: 10px 0;
+.add-toggle-btn {
+  background: #007aff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
 }
 
-.oneDiaryInfoDiv{
+.category-row {
   display: flex;
   align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
 }
 
-.oneDiaryDateDiv{
-  position: relative;
-  height: 12px;
+.category-row.child {
+  margin-left: 24px;
+  color: #555;
 }
 
-.oneDiaryDate{
-  position: absolute;
-  color: #646464;
-  font-size: 12px;
-  right: 0;
+.category-row input,
+.category-row select {
+  padding: 4px 6px;
+  font-size: 14px;
 }
 
-.oneDiaryUser{
-  flex: 0.2;
-}
-
-.oneDiaryContent{
-  flex: 0.8
-}
-
-.oneDiaryInputBtn{
-  position: relative;
-  width: 840px;
-  height: 40px;
-  background-color: #ffffff80;
-  border-radius: 50px;
-  margin: 10px 10px;
-  padding: 0 20px;
-}
-
-.oneDiaryInput{
-  position: absolute;
-  width: 750px;
-  height: 39px;
-  left: 0;
-  border: 1px solid #D47E22;
-  border-radius: 50px 0 0 50px;
-  padding: 0 20px;
-}
-
-.oneDiarySendBtn{
-  position: absolute;
-  width: 90px;
-  height: 39px;
-  right: 0px;
-  color: #fff;
-  font-size: 18px;
-  background-color: #D47E22;
-  border: 1px solid #D47E22;
-  border-radius: 0 50px 50px 0;
+.category-row button {
+  padding: 4px 8px;
+  font-size: 13px;
   cursor: pointer;
+}
+
+.add-form {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 6px;
 }

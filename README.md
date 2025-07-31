@@ -103,9 +103,15 @@ springboot 세팅 (3.5.3)
 
 - post 화면들 디자인
 - 왼쪽 메뉴 디자인
-- domain DB 테이블 추가
-- category 수정 로직 추가
-- category 설정 화면 추가
+
+- Category 추가, 수정, 삭제 API 로직 추가
+
+2025-07-31(목)
+- Layout 나눔
+- Setting Category 페이지 추가
+- Category DB 테이블 생성
+- Category 화면 렌더링 로직 추가
+
 
 2025-07-30(수)
 - 페이지 새로고침 하면 데이터 다시 가져오도록 수정

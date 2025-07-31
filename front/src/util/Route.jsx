@@ -10,4 +10,8 @@ export const routes = {
   // 그룹
   groupList: () => `/groupList`,
   createGroup: () => `/createGroup`,
+
+  // setting
+  profile: (groupUid) => ``,
+  category: (groupUid) => `/group/${groupUid}/setting/category`,
 };
