@@ -12,7 +12,9 @@ const Category = () => {
     const [categoryList, setCategoryList] = useState([])
     const [editingId, setEditingId] = useState(null);
     const [isAdding, setIsAdding] = useState(false);
-    const [categoryForm, setCategoryForm] = useState({ name: '', upCategory: '', order: 1 });
+
+    const [insertForm, setInsertForm] = useState({name: '', upCategory: 0, order: 1})
+    const [updateForm, setUpdateForm] = useState({ name: '', upCategory: 0, order: 1 });
 
     useEffect(() => {
         if (!userInfo) return;
@@ -21,125 +23,136 @@ const Category = () => {
     }, [userInfo]);
 
     const getCategoryList = async () => {
-        /* try {
-            const res = await axios.post("/setting/category/getCategoryList", {groupUid: groupUid}); // 현재 로그인한 사용자가 그룹에 속했는지, MANAGER 권한인지 확인
+        try {
+            const res = await axios.post("/setting/category/getCategoryList", {groupUid: groupUid});
             if(res.data.status === 'success') {
-                setCategoryList(res.data.categoryList)
+                setCategoryList(res.data.list)
             }else{
                 alert(res.data.message);
             }
         } catch (err) {
             console.error("데이터 가져오기 실패", err);
-        }*/
-       setCategoryList([
-            { uid: 1, name: '개발', upCategory: null, order: 1 },
-            { uid: 2, name: 'React', upCategory: 1, order: 1 },
-            { uid: 3, name: 'Vue', upCategory: 1, order: 2 },
-            { uid: 4, name: '일상', upCategory: null, order: 2 },
-       ])
+        }
     }
 
-    const sortCategoryList = () => {
-        const sorted = [...categoryList].sort((a, b) =>
-            a.upCategory === b.upCategory
-                ? a.order - b.order
-                : a.upCategory === null
-                ? -1
-                : 1
-            );
-
-        return sorted.map(setCategory);
-    };
-
-    const setCategory = (cat) => {
-        const isEditing = editingId === cat.uid;
-
-        return (
-            <div key={cat.uid} className={`category-row ${cat.upCategory ? 'child' : 'parent'}`}>
-                {isEditing ? (
+    const setCategory = () => {
+      return (
+        <div>
+          {categoryList.map(parent => (
+            <div>
+              <div key={parent.uid} className="category-row parent">
+                {editingId === parent.uid ? (
+                  <>
+                    <div className="w80p">
+                      <input className="w100p" value={parent.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}/>
+                    </div>
+                    <div className="w20p flex alignCenter">
+                      <label className="w60">순서 : </label>
+                      <input className="w90p" type="number" placeholder="순서(숫자)" value={parent.order} onChange={(e) => setUpdateForm({ ...updateForm, order: e.target.value })}/>
+                    </div>
+                    <div className="w20p">
+                      <button onClick={updateCategory}>저장</button>
+                      <button onClick={() => setEditingId(null)}>취소</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span className="w80p">{parent.name}</span>
+                    <span className="w20p">순서: {parent.order}</span>
+                    <div className="w20p">
+                      <button onClick={() => setUpdateCategoryForm(parent)}>수정</button>
+                      <button onClick={() => deleteCategory(parent.uid)}>삭제</button>
+                    </div>
+                  </>
+                )}
+              </div>
+              {parent.categoryList.map(child => (
+                <div key={child.uid} className="category-row child">
+                  {editingId === child.uid ? (
                     <>
-                        <input
-                        value={categoryForm.name}
-                        onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
-                        />
-                        <select
-                        value={categoryForm.upCategory}
-                        onChange={(e) => setCategoryForm({ ...categoryForm, upCategory: e.target.value })}
-                        >
-                        <option value="">(상위 없음)</option>
-                        {categoryList.filter((c) => c.upCategory === null && c.uid !== cat.uid).map((p) => (
+                      <div className="w40p">
+                        <input className="w100p" value={child.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}/>
+                      </div>
+                      <div className="w20p">
+                        <select className="w100p" value={child.upCategory} onChange={(e) => setUpdateForm({ ...updateForm, upCategory: e.target.value })}>
+                          <option value="0">(상위 없음)</option>
+                          {categoryList.filter((c) => c.upCategory === 0).map((p) => (
                             <option key={p.uid} value={p.uid}>
                                 {p.name}
-                            </option>
-                        ))}
+                              </option>
+                          ))}
                         </select>
-                        <input
-                        type="number"
-                        value={categoryForm.order}
-                        onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })}
-                        style={{ width: 60 }}
-                        />
+                      </div>
+                      <div className="w20p flex alignCenter">
+                        <label className="w60">순서 : </label>
+                        <input className="w90p" type="number" placeholder="순서(숫자)" value={child.order} onChange={(e) => setUpdateForm({ ...updateForm, order: e.target.value })}/>
+                      </div>
+                      <div className="w20p">
                         <button onClick={updateCategory}>저장</button>
                         <button onClick={() => setEditingId(null)}>취소</button>
+                      </div>
                     </>
-                ) : (
+                  ) : (
                     <>
-                        <span>{cat.name}</span>
-                        <span>{cat.upCategory ? `(하위)` : `(상위)`}</span>
-                        <span>순서: {cat.order}</span>
-                        <button onClick={() => setUpdateCategoryForm(cat)}>수정</button>
-                        <button onClick={() => deleteCategory(cat.uid)}>삭제</button>
+                      <span className="w40p">{child.name}</span>
+                      <span className="w20p">{parent.name}</span>
+                      <span className="w20p">순서: {child.order}</span>
+                      <div className="w20p">
+                        <button onClick={() => setUpdateCategoryForm(child)}>수정</button>
+                        <button onClick={() => deleteCategory(child.uid)}>삭제</button>
+                      </div>
                     </>
-                )}
+                  )}
+                </div>
+              ))}
             </div>
-        );
+          ))}
+        </div>
+      );
     };
-
+//---------수정 필요--------//
     //카테고리 추가
     const setInsertFrom = () => (
         <div className="category-row add-form">
-            <input
-                placeholder="카테고리명"
-                value={categoryForm.name}
-                onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
-            />
-            <select
-                value={categoryForm.upCategory}
-                onChange={(e) => setCategoryForm({ ...categoryForm, upCategory: e.target.value })}
-            >
-                <option value="">(상위 없음)</option>
-                {categoryList.filter((c) => c.upCategory === null).map((p) => (
-                    <option key={p.uid} value={p.uid}>
-                        {p.name}
+            <div className="w40p">
+              <input className="w100p" placeholder="카테고리명" value={insertForm.name} onChange={(e) => setInsertForm({ ...insertForm, name: e.target.value })}/>
+            </div>
+            <div className="w20p">
+              <select className="w100p" value={insertForm.upCategory} onChange={(e) => setInsertForm({ ...insertForm, upCategory: e.target.value })}>
+                <option value="0">(상위 없음)</option>
+                {categoryList.filter((c) => c.upCategory === 0).map((p) => (
+                  <option key={p.uid} value={p.uid}>
+                      {p.name}
                     </option>
                 ))}
-            </select>
-            <input
-                type="number"
-                value={categoryForm.order}
-                onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })}
-                style={{ width: 60 }}
-            />
-            <button onClick={insertCategory}>추가</button>
-            <button onClick={() => setIsAdding(false)}>취소</button>
+              </select>
+            </div>
+            <div className="w20p flex alignCenter">
+              <label className="w60">순서 : </label>
+              <input className="w90p" type="number" placeholder="순서(숫자)" value={insertForm.order} onChange={(e) => setInsertForm({ ...insertForm, order: e.target.value })}/>
+            </div>
+            <div className="w20p">
+              <button onClick={insertCategory}>추가</button>
+              <button onClick={() => setIsAdding(false)}>취소</button>
+            </div>
         </div>
     );
 
     const insertCategory = async () => {
-        if (!categoryForm.name.trim()) return alert('카테고리명을 입력하세요');
+        if (!insertForm.name.trim()) return alert('카테고리명을 입력하세요');
 
         const param = {
             groupUid: groupUid,
-            name: categoryForm.name,
-            upCategory: categoryForm.upCategory === '' ? null : Number(categoryForm.upCategory),
-            order: Number(categoryForm.order),
+            name: insertForm.name,
+            upCategory: insertForm.upCategory,
+            order: Number(insertForm.order),
         };
 
         try {
             const res = await axios.post("/setting/category/insertCategory", param); // 현재 로그인한 사용자가 그룹에 속했는지, MANAGER 권한인지 확인
             if(res.data.status === 'success') {
                 getCategoryList()
-                setCategoryForm({ name: '', upCategory: '', order: 1 });
+                setInsertForm({ name: '', upCategory: 0, order: 1 });
                 setIsAdding(false);
             }else{
                 alert(res.data.message);
@@ -152,7 +165,7 @@ const Category = () => {
     // update
     const setUpdateCategoryForm = (cat) => {
         setEditingId(cat.uid);
-        setCategoryForm({
+        setUpdateForm({
             name: cat.name,
             upCategory: cat.upCategory,
             order: cat.order
@@ -160,13 +173,13 @@ const Category = () => {
     } 
 
     const updateCategory = async (cat) => {
-        if (!categoryForm.name.trim()) return alert('카테고리명을 입력하세요');
+        if (!updateForm.name.trim()) return alert('카테고리명을 입력하세요');
 
         const param = {
             groupUid: groupUid,
-            name: categoryForm.name,
-            upCategory: categoryForm.upCategory === '' ? null : Number(categoryForm.upCategory),
-            order: Number(categoryForm.order),
+            name: updateForm.name,
+            upCategory: updateForm.upCategory === '' ? null : Number(updateForm.upCategory),
+            order: Number(updateForm.order),
         };
 
         try {
@@ -209,7 +222,7 @@ const Category = () => {
         </button>
 
         {isAdding && setInsertFrom()}
-        {sortCategoryList()}
+        {setCategory()}
         </div>
     )
 }

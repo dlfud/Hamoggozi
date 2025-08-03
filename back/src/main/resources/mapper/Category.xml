@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hamoggozi.back.dao.CategoryDao">
+    <resultMap id="getCategoryDepthOne" type="CategoryBean">
+        <result column="uid" property="uid"/>
+        <result column="groupUid" property="groupUid"/>
+        <collection column="uid=uid, groupUid=groupUid" property="categoryList" select="getCategoryDepthTwo"/>
+    </resultMap>
+
+    <select id="getCategoryList" resultMap="getCategoryDepthOne">
+        SELECT C.UID, C.GROUPUID, C.NAME, C.UPCATEGORY, C.DEPTH, C.`ORDER`
+        FROM CATEGORY C
+        WHERE C.GROUPUID = #{groupUid} AND C.DEPTH = 1
+        ORDER BY C.`ORDER` ASC
+    </select>
+
+    <select id="getCategoryDepthTwo" resultType="CategoryBean">
+        SELECT C.UID, C.GROUPUID, C.NAME,C.UPCATEGORY,C.DEPTH, C.`ORDER`
+        FROM CATEGORY C
+        WHERE C.GROUPUID = #{groupUid} AND C.DEPTH = 2 AND C.UPCATEGORY = #{uid}
+        ORDER BY C.`ORDER` ASC
+    </select>
+
+    <insert id="insertCategory">
+        INSERT INTO CATEGORY (GROUPUID, NAME, UPCATEGORY, DEPTH, `ORDER`, INSERTBY, INSERTDATE, UPDATEBY, UPDATEDATE)
+        VALUES (#{groupUid}, #{name}, #{upCategory},#{depth}, #{order}, #{userUid}, SYSDATE(), #{userUid}, SYSDATE())
+    </insert>
+
+    <update id="updateCategory">
+        UPDATE CATEGORY
+        SET NAME = #{name}, UPCATEGORY = #{upCategory}, DEPTH = #{depth}, `ORDER` = #{order}, UPDATEBY = #{userUid}, UPDATEDATE = SYSDATE()
+        WHERE UID = #{uid} AND GROUPUID = #{groupUid}
+    </update>
+
+    <delete id="deleteCategory">
+        DELETE FROM CATEGORY
+        WHERE UID = #{uid} AND GROUPUID = #{groupUid}
+    </delete>
+</mapper>

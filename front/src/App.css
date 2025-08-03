@@ -380,9 +380,7 @@
 
 /*setting category*/
 .category-manager {
-  max-width: 600px;
-  margin: 30px auto;
-  font-family: 'Noto Sans KR', sans-serif;
+  margin: 15px; 
 }
 
 h2 {
@@ -403,14 +401,28 @@ h2 {
 
 .category-row {
   display: flex;
+  height: 45px;
   align-items: center;
   gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  padding: 10px 30px;
+  border: 1px solid #D47E22;
+  margin-bottom: 10px;
+  background-color: #ffffff80;
+}
+
+.category-row > * {
+  border-right: 1px solid #ccc; 
+  margin-right: 8px;
+  padding-right: 8px;
+}
+
+.category-row > *:last-child {
+  border-right: none; 
+  margin-right: 0;
 }
 
 .category-row.child {
-  margin-left: 24px;
+  margin-left: 60px;
   color: #555;
 }
 
@@ -418,6 +430,8 @@ h2 {
 .category-row select {
   padding: 4px 6px;
   font-size: 14px;
+  background-color: #fff;
+  height: 40px;
 }
 
 .category-row button {
