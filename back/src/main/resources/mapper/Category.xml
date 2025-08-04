@@ -24,6 +24,12 @@
         ORDER BY C.`ORDER` ASC
     </select>
 
+    <select id="getMaxOrder" resultType="int">
+        SELECT IFNULL(MAX(`ORDER`), 0)
+        FROM CATEGORY
+        WHERE GROUPUID = #{groupUid} AND UPCATEGORY = #{upCategory} AND DEPTH = #{depth}
+    </select>
+
     <insert id="insertCategory">
         INSERT INTO CATEGORY (GROUPUID, NAME, UPCATEGORY, DEPTH, `ORDER`, INSERTBY, INSERTDATE, UPDATEBY, UPDATEDATE)
         VALUES (#{groupUid}, #{name}, #{upCategory},#{depth}, #{order}, #{userUid}, SYSDATE(), #{userUid}, SYSDATE())
@@ -35,8 +41,20 @@
         WHERE UID = #{uid} AND GROUPUID = #{groupUid}
     </update>
 
+    <select id="getOriginUpCategory" resultType="int">
+        SELECT UPCATEGORY
+        FROM CATEGORY
+        WHERE UID = #{uid}
+    </select>
+
     <delete id="deleteCategory">
         DELETE FROM CATEGORY
         WHERE UID = #{uid} AND GROUPUID = #{groupUid}
     </delete>
+
+    <update id="updateOrder">
+        UPDATE CATEGORY
+        SET `ORDER` = #{order}, UPDATEBY = #{userUid}, UPDATEDATE = SYSDATE()
+        WHERE UID = #{uid} AND GROUPUID = #{groupUid}
+    </update>
 </mapper>

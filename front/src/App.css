@@ -445,3 +445,10 @@ h2 {
   padding: 10px;
   border-radius: 6px;
 }
+
+.drag-handle {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+  cursor: grab;
+}

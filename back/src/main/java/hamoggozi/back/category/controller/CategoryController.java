@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -74,6 +75,9 @@ public class CategoryController {
                 }else{
                     categoryBean.setDepth(1);
                 }
+                int order = categoryService.getMaxOrder(categoryBean) + 1;
+                categoryBean.setOrder(order);
+
                 resultMap.put("status", "success");
                 resultMap.put("code", "200");
                 resultMap.put("list", categoryService.insertCategory(categoryBean));
@@ -108,6 +112,12 @@ public class CategoryController {
                 }else{
                     categoryBean.setDepth(1);
                 }
+                int originUpCategory = categoryService.getOriginUpCategory(categoryBean);
+                if(categoryBean.getUpCategory() != originUpCategory){
+                    int order = categoryService.getMaxOrder(categoryBean) + 1;
+                    categoryBean.setOrder(order);
+                }
+
                 resultMap.put("status", "success");
                 resultMap.put("code", "200");
                 resultMap.put("list", categoryService.updateCategory(categoryBean));
@@ -154,4 +164,39 @@ public class CategoryController {
         return ResponseEntity.ok(resultMap);
     }
 
+    @RequestMapping(value="/setting/category/updateOrder", method=RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> updateOrder(@RequestHeader("Authorization") String authHeader, @RequestBody List<CategoryBean> categoryList) throws Exception{
+        Map<String, Object> resultMap = new HashMap<>();
+
+        String token = authHeader.replace("Bearer ", "");
+        Claims claims = jwtUtil.parseToken(token);
+        int uid = claims.get("uid", Integer.class);
+        int checkGroupUser = generalService.checkGroupUser(categoryList.get(0).getGroupUid(), uid);
+        if(checkGroupUser > 0){
+            String checkAuth = generalService.checkAuth(categoryList.get(0).getGroupUid(), uid);
+            if("MANAGER".equals(checkAuth)){
+                for(CategoryBean parentCategory : categoryList){
+                    parentCategory.setUserUid(uid);
+                    categoryService.updateOrder(parentCategory);
+                    for(CategoryBean childCategory : categoryList){
+                        childCategory.setUserUid(uid);
+                        categoryService.updateOrder(childCategory);
+                    }
+                }
+
+                resultMap.put("status", "success");
+                resultMap.put("code", "200");
+            }else{
+                resultMap.put("status", "fail");
+                resultMap.put("code", "200");
+                resultMap.put("massage", "권한이 없습니다.");
+            }
+        }else{
+            resultMap.put("status", "fail");
+            resultMap.put("code", "200");
+            resultMap.put("massage", "그룹에 속한 유저가 아닙니다.");
+        }
+
+        return ResponseEntity.ok(resultMap);
+    }
 }

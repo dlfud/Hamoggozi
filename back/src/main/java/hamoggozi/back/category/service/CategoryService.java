@@ -20,8 +20,18 @@ public class CategoryService implements CategoryServiceI {
     }
 
     @Override
+    public int getMaxOrder(CategoryBean categoryBean) throws Exception {
+        return categoryDao.getMaxOrder(categoryBean);
+    }
+
+    @Override
     public int insertCategory(CategoryBean categoryBean) throws Exception {
         return categoryDao.insertCategory(categoryBean);
+    }
+
+    @Override
+    public int getOriginUpCategory(CategoryBean categoryBean) throws Exception {
+        return categoryDao.getOriginUpCategory(categoryBean);
     }
 
     @Override
@@ -32,5 +42,10 @@ public class CategoryService implements CategoryServiceI {
     @Override
     public int deleteCategory(CategoryBean categoryBean) throws Exception {
         return categoryDao.deleteCategory(categoryBean);
+    }
+
+    @Override
+    public void updateOrder(CategoryBean categoryBean) throws Exception {
+        categoryDao.updateOrder(categoryBean);
     }
 }

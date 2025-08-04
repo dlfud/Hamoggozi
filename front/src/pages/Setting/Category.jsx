@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragOverlay, rectSortingStrategy} from "@dnd-kit/core";
+import { arrayMove, verticalListSortingStrategy,sortableKeyboardCoordinates, useSortable, SortableContext } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import axios from "../../api/axios";
 import { useGroup } from '../../util/GroupContext';
 import { routes } from '../../util/Route'; 
@@ -8,6 +11,8 @@ const Category = () => {
     const { userInfo, groupInfo } = useGroup();    
     const { groupUid } = useParams();
     const navigate = useNavigate();
+
+    const sensors = useSensors(useSensor(PointerSensor));
 
     const [categoryList, setCategoryList] = useState([])
     const [editingId, setEditingId] = useState(null);
@@ -38,104 +43,115 @@ const Category = () => {
     const setCategory = () => {
       return (
         <div>
-          {categoryList.map(parent => (
-            <div>
-              <div key={parent.uid} className="category-row parent">
-                {editingId === parent.uid ? (
-                  <>
-                    <div className="w80p">
-                      <input className="w100p" value={parent.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}/>
-                    </div>
-                    <div className="w20p flex alignCenter">
-                      <label className="w60">순서 : </label>
-                      <input className="w90p" type="number" placeholder="순서(숫자)" value={parent.order} onChange={(e) => setUpdateForm({ ...updateForm, order: e.target.value })}/>
-                    </div>
-                    <div className="w20p">
-                      <button onClick={updateCategory}>저장</button>
-                      <button onClick={() => setEditingId(null)}>취소</button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <span className="w80p">{parent.name}</span>
-                    <span className="w20p">순서: {parent.order}</span>
-                    <div className="w20p">
-                      <button onClick={() => setUpdateCategoryForm(parent)}>수정</button>
-                      <button onClick={() => deleteCategory(parent.uid)}>삭제</button>
-                    </div>
-                  </>
-                )}
-              </div>
-              {parent.categoryList.map(child => (
-                <div key={child.uid} className="category-row child">
-                  {editingId === child.uid ? (
-                    <>
-                      <div className="w40p">
-                        <input className="w100p" value={child.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}/>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleParentDragEnd(e, 0)}>
+            <SortableContext items={categoryList.map((p) => p.uid)} strategy={verticalListSortingStrategy}>
+              {categoryList.map(parent => (
+                <div>
+                  <SortableItem id={parent.uid}>
+                    {(listeners) => (
+                      <div className="category-row parent">  
+                        <div className="drag-handle" {...listeners}>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M2.66669 4.00004C2.66669 3.82323 2.73693 3.65366 2.86195 3.52864C2.98697 3.40361 3.15654 3.33337 3.33335 3.33337H12.6667C12.8435 3.33337 13.0131 3.40361 13.1381 3.52864C13.2631 3.65366 13.3334 3.82323 13.3334 4.00004C13.3334 4.17685 13.2631 4.34642 13.1381 4.47145C13.0131 4.59647 12.8435 4.66671 12.6667 4.66671H3.33335C3.15654 4.66671 2.98697 4.59647 2.86195 4.47145C2.73693 4.34642 2.66669 4.17685 2.66669 4.00004ZM2.66669 6.66671C2.66669 6.4899 2.73693 6.32033 2.86195 6.1953C2.98697 6.07028 3.15654 6.00004 3.33335 6.00004H12.6667C12.8435 6.00004 13.0131 6.07028 13.1381 6.1953C13.2631 6.32033 13.3334 6.4899 13.3334 6.66671C13.3334 6.84352 13.2631 7.01309 13.1381 7.13811C13.0131 7.26314 12.8435 7.33337 12.6667 7.33337H3.33335C3.15654 7.33337 2.98697 7.26314 2.86195 7.13811C2.73693 7.01309 2.66669 6.84352 2.66669 6.66671ZM2.66669 9.33337C2.66669 9.15656 2.73693 8.98699 2.86195 8.86197C2.98697 8.73695 3.15654 8.66671 3.33335 8.66671H12.6667C12.8435 8.66671 13.0131 8.73695 13.1381 8.86197C13.2631 8.98699 13.3334 9.15656 13.3334 9.33337C13.3334 9.51019 13.2631 9.67975 13.1381 9.80478C13.0131 9.9298 12.8435 10 12.6667 10H3.33335C3.15654 10 2.98697 9.9298 2.86195 9.80478C2.73693 9.67975 2.66669 9.51019 2.66669 9.33337ZM2.66669 12C2.66669 11.8232 2.73693 11.6537 2.86195 11.5286C2.98697 11.4036 3.15654 11.3334 3.33335 11.3334H12.6667C12.8435 11.3334 13.0131 11.4036 13.1381 11.5286C13.2631 11.6537 13.3334 11.8232 13.3334 12C13.3334 12.1769 13.2631 12.3464 13.1381 12.4714C13.0131 12.5965 12.8435 12.6667 12.6667 12.6667H3.33335C3.15654 12.6667 2.98697 12.5965 2.86195 12.4714C2.73693 12.3464 2.66669 12.1769 2.66669 12Z" fill="#1E1E1E"/>
+                          </svg>
+                        </div>
+                        {editingId === parent.uid ? (
+                          <>
+                            <div className="w80p">
+                              <input className="w100p" value={parent.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}/>
+                            </div>
+                            <div className="w20p">
+                              <button onClick={updateCategory}>저장</button>
+                              <button onClick={() => setEditingId(null)}>취소</button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <span className="w80p">{parent.name}</span>
+                            <div className="w20p">
+                              <button onClick={() => setUpdateCategoryForm(parent)}>수정</button>
+                              <button onClick={() => deleteCategory(parent.uid)}>삭제</button>
+                            </div>
+                          </>
+                        )}
                       </div>
-                      <div className="w20p">
-                        <select className="w100p" value={child.upCategory} onChange={(e) => setUpdateForm({ ...updateForm, upCategory: e.target.value })}>
-                          <option value="0">(상위 없음)</option>
-                          {categoryList.filter((c) => c.upCategory === 0).map((p) => (
-                            <option key={p.uid} value={p.uid}>
-                                {p.name}
-                              </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="w20p flex alignCenter">
-                        <label className="w60">순서 : </label>
-                        <input className="w90p" type="number" placeholder="순서(숫자)" value={child.order} onChange={(e) => setUpdateForm({ ...updateForm, order: e.target.value })}/>
-                      </div>
-                      <div className="w20p">
-                        <button onClick={updateCategory}>저장</button>
-                        <button onClick={() => setEditingId(null)}>취소</button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <span className="w40p">{child.name}</span>
-                      <span className="w20p">{parent.name}</span>
-                      <span className="w20p">순서: {child.order}</span>
-                      <div className="w20p">
-                        <button onClick={() => setUpdateCategoryForm(child)}>수정</button>
-                        <button onClick={() => deleteCategory(child.uid)}>삭제</button>
-                      </div>
-                    </>
-                  )}
+                    )}
+                  </SortableItem>
+                  <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleChildDragEnd(e, parent.uid)}>
+                    <SortableContext items={parent.categoryList.map((c) => c.uid)} strategy={verticalListSortingStrategy}>
+                      {parent.categoryList.map(child => (
+                        <SortableItem key={child.uid} id={child.uid}>
+                          {(listeners) => (
+                            <div className="category-row child">  
+                              <div className="drag-handle" {...listeners}>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2.66669 4.00004C2.66669 3.82323 2.73693 3.65366 2.86195 3.52864C2.98697 3.40361 3.15654 3.33337 3.33335 3.33337H12.6667C12.8435 3.33337 13.0131 3.40361 13.1381 3.52864C13.2631 3.65366 13.3334 3.82323 13.3334 4.00004C13.3334 4.17685 13.2631 4.34642 13.1381 4.47145C13.0131 4.59647 12.8435 4.66671 12.6667 4.66671H3.33335C3.15654 4.66671 2.98697 4.59647 2.86195 4.47145C2.73693 4.34642 2.66669 4.17685 2.66669 4.00004ZM2.66669 6.66671C2.66669 6.4899 2.73693 6.32033 2.86195 6.1953C2.98697 6.07028 3.15654 6.00004 3.33335 6.00004H12.6667C12.8435 6.00004 13.0131 6.07028 13.1381 6.1953C13.2631 6.32033 13.3334 6.4899 13.3334 6.66671C13.3334 6.84352 13.2631 7.01309 13.1381 7.13811C13.0131 7.26314 12.8435 7.33337 12.6667 7.33337H3.33335C3.15654 7.33337 2.98697 7.26314 2.86195 7.13811C2.73693 7.01309 2.66669 6.84352 2.66669 6.66671ZM2.66669 9.33337C2.66669 9.15656 2.73693 8.98699 2.86195 8.86197C2.98697 8.73695 3.15654 8.66671 3.33335 8.66671H12.6667C12.8435 8.66671 13.0131 8.73695 13.1381 8.86197C13.2631 8.98699 13.3334 9.15656 13.3334 9.33337C13.3334 9.51019 13.2631 9.67975 13.1381 9.80478C13.0131 9.9298 12.8435 10 12.6667 10H3.33335C3.15654 10 2.98697 9.9298 2.86195 9.80478C2.73693 9.67975 2.66669 9.51019 2.66669 9.33337ZM2.66669 12C2.66669 11.8232 2.73693 11.6537 2.86195 11.5286C2.98697 11.4036 3.15654 11.3334 3.33335 11.3334H12.6667C12.8435 11.3334 13.0131 11.4036 13.1381 11.5286C13.2631 11.6537 13.3334 11.8232 13.3334 12C13.3334 12.1769 13.2631 12.3464 13.1381 12.4714C13.0131 12.5965 12.8435 12.6667 12.6667 12.6667H3.33335C3.15654 12.6667 2.98697 12.5965 2.86195 12.4714C2.73693 12.3464 2.66669 12.1769 2.66669 12Z" fill="#1E1E1E"/>
+                                </svg>
+                              </div>
+                              {editingId === child.uid ? (
+                                <>
+                                  <div className="w60p">
+                                    <input className="w100p" value={child.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}/>
+                                  </div>
+                                  <div className="w20p">
+                                    <select className="w100p" value={child.upCategory} onChange={(e) => setUpdateForm({ ...updateForm, upCategory: e.target.value })}>
+                                      <option value="0">(상위 없음)</option>
+                                      {categoryList.filter((c) => c.upCategory === 0).map((p) => (
+                                        <option key={p.uid} value={p.uid}>
+                                            {p.name}
+                                          </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                  <div className="w20p">
+                                    <button onClick={updateCategory}>저장</button>
+                                    <button onClick={() => setEditingId(null)}>취소</button>
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="w80p">{child.name}</span>
+                                  <div className="w20p">
+                                    <button onClick={() => setUpdateCategoryForm(child)}>수정</button>
+                                    <button onClick={() => deleteCategory(child.uid)}>삭제</button>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </SortableItem>
+                      ))}
+                    </SortableContext>
+                  </DndContext>
                 </div>
               ))}
-            </div>
-          ))}
+            </SortableContext>
+          </DndContext>
         </div>
       );
     };
-//---------수정 필요--------//
+
     //카테고리 추가
     const setInsertFrom = () => (
-        <div className="category-row add-form">
-            <div className="w40p">
-              <input className="w100p" placeholder="카테고리명" value={insertForm.name} onChange={(e) => setInsertForm({ ...insertForm, name: e.target.value })}/>
-            </div>
-            <div className="w20p">
-              <select className="w100p" value={insertForm.upCategory} onChange={(e) => setInsertForm({ ...insertForm, upCategory: e.target.value })}>
-                <option value="0">(상위 없음)</option>
-                {categoryList.filter((c) => c.upCategory === 0).map((p) => (
-                  <option key={p.uid} value={p.uid}>
-                      {p.name}
-                    </option>
-                ))}
-              </select>
-            </div>
-            <div className="w20p flex alignCenter">
-              <label className="w60">순서 : </label>
-              <input className="w90p" type="number" placeholder="순서(숫자)" value={insertForm.order} onChange={(e) => setInsertForm({ ...insertForm, order: e.target.value })}/>
-            </div>
-            <div className="w20p">
-              <button onClick={insertCategory}>추가</button>
-              <button onClick={() => setIsAdding(false)}>취소</button>
-            </div>
-        </div>
+      <div className="category-row add-form">
+          <div className="w60p">
+            <input className="w100p" placeholder="카테고리명" value={insertForm.name} onChange={(e) => setInsertForm({ ...insertForm, name: e.target.value })}/>
+          </div>
+          <div className="w20p">
+            <select className="w100p" value={insertForm.upCategory} onChange={(e) => setInsertForm({ ...insertForm, upCategory: e.target.value })}>
+              <option value="0">(상위 없음)</option>
+              {categoryList.filter((c) => c.upCategory === 0).map((p) => (
+                <option key={p.uid} value={p.uid}>
+                    {p.name}
+                  </option>
+              ))}
+            </select>
+          </div>
+          <div className="w20p">
+            <button onClick={insertCategory}>추가</button>
+            <button onClick={() => setIsAdding(false)}>취소</button>
+          </div>
+      </div>
     );
 
     const insertCategory = async () => {
@@ -183,7 +199,7 @@ const Category = () => {
         };
 
         try {
-            const res = await axios.post("/setting/category/updateCategory", param); // 현재 로그인한 사용자가 그룹에 속했는지, MANAGER 권한인지 확인
+            const res = await axios.post("/setting/category/updateCategory", param);
             if(res.data.status === 'success') {
                 getCategoryList()
                 setEditingId(null)
@@ -203,7 +219,7 @@ const Category = () => {
         }
 
         try {
-            const res = await axios.post("/setting/category/deleteCategory", param); // 현재 로그인한 사용자가 그룹에 속했는지, MANAGER 권한인지 확인
+            const res = await axios.post("/setting/category/deleteCategory", param); 
             if(res.data.status === 'success') {
                 getCategoryList()
             }else{
@@ -212,6 +228,95 @@ const Category = () => {
         } catch (err) {
             console.error("데이터 가져오기 실패", err);
         }
+    }
+
+
+    //dnd-kit
+    const SortableItem = ({ id, children }) => {
+      const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+      } = useSortable({ id });
+
+      const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+      };
+
+      return (
+        <div ref={setNodeRef} style={style} {...attributes}>
+          {/* <div {...listeners}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.66669 4.00004C2.66669 3.82323 2.73693 3.65366 2.86195 3.52864C2.98697 3.40361 3.15654 3.33337 3.33335 3.33337H12.6667C12.8435 3.33337 13.0131 3.40361 13.1381 3.52864C13.2631 3.65366 13.3334 3.82323 13.3334 4.00004C13.3334 4.17685 13.2631 4.34642 13.1381 4.47145C13.0131 4.59647 12.8435 4.66671 12.6667 4.66671H3.33335C3.15654 4.66671 2.98697 4.59647 2.86195 4.47145C2.73693 4.34642 2.66669 4.17685 2.66669 4.00004ZM2.66669 6.66671C2.66669 6.4899 2.73693 6.32033 2.86195 6.1953C2.98697 6.07028 3.15654 6.00004 3.33335 6.00004H12.6667C12.8435 6.00004 13.0131 6.07028 13.1381 6.1953C13.2631 6.32033 13.3334 6.4899 13.3334 6.66671C13.3334 6.84352 13.2631 7.01309 13.1381 7.13811C13.0131 7.26314 12.8435 7.33337 12.6667 7.33337H3.33335C3.15654 7.33337 2.98697 7.26314 2.86195 7.13811C2.73693 7.01309 2.66669 6.84352 2.66669 6.66671ZM2.66669 9.33337C2.66669 9.15656 2.73693 8.98699 2.86195 8.86197C2.98697 8.73695 3.15654 8.66671 3.33335 8.66671H12.6667C12.8435 8.66671 13.0131 8.73695 13.1381 8.86197C13.2631 8.98699 13.3334 9.15656 13.3334 9.33337C13.3334 9.51019 13.2631 9.67975 13.1381 9.80478C13.0131 9.9298 12.8435 10 12.6667 10H3.33335C3.15654 10 2.98697 9.9298 2.86195 9.80478C2.73693 9.67975 2.66669 9.51019 2.66669 9.33337ZM2.66669 12C2.66669 11.8232 2.73693 11.6537 2.86195 11.5286C2.98697 11.4036 3.15654 11.3334 3.33335 11.3334H12.6667C12.8435 11.3334 13.0131 11.4036 13.1381 11.5286C13.2631 11.6537 13.3334 11.8232 13.3334 12C13.3334 12.1769 13.2631 12.3464 13.1381 12.4714C13.0131 12.5965 12.8435 12.6667 12.6667 12.6667H3.33335C3.15654 12.6667 2.98697 12.5965 2.86195 12.4714C2.73693 12.3464 2.66669 12.1769 2.66669 12Z" fill="#1E1E1E"/>
+            </svg>
+          </div>
+          {children} */}
+          {children(listeners)}
+        </div>
+      );
+    };
+
+    const handleParentDragEnd = (event) => {
+      const { active, over } = event;
+      if (!over || active.id === over.id) return;
+
+      const oldIndex = categoryList.findIndex(
+        (item) => item.uid === active.id
+      );
+      const newIndex = categoryList.findIndex(
+        (item) => item.uid === over.id
+      );
+
+      if (oldIndex < 0 || newIndex < 0) return;
+
+      const newList = arrayMove(categoryList, oldIndex, newIndex).map((item, idx) => ({
+          ...item, order: idx + 1
+        })
+      );
+
+      setCategoryList(newList);
+    };
+
+    const handleChildDragEnd = (event, parentUid) => {
+      const { active, over } = event;
+      if (!over || active.id === over.id) return;
+
+      const parentIndex = categoryList.findIndex(
+        (item) => item.uid === parentUid
+      );
+      const children = categoryList[parentIndex].categoryList;
+
+      const oldIndex = children.findIndex((c) => c.uid === active.id);
+      const newIndex = children.findIndex((c) => c.uid === over.id);
+
+      const newChildren = arrayMove(children, oldIndex, newIndex).map((child, idx) => ({
+          ...child, order: idx + 1,
+        })
+      );
+
+      const newList = [...categoryList];
+      newList[parentIndex] = {
+        ...newList[parentIndex],
+        categoryList: newChildren,
+      };
+
+      setCategoryList(newList);
+    };
+
+    const saveOrder = async () => {
+      try {
+        const res = await axios.post("/setting/category/updateOrder", categoryList); 
+        if(res.data.status === 'success') {
+            getCategoryList()
+        }else{
+            alert(res.data.message);
+        }
+      } catch (err) {
+          console.error("데이터 가져오기 실패", err);
+      }
     }
 
     return (
@@ -223,173 +328,10 @@ const Category = () => {
 
         {isAdding && setInsertFrom()}
         {setCategory()}
+
+        <button className="add-toggle-btn" onClick={() => saveOrder()}>순서 저장</button>
         </div>
     )
 }
 
 export default Category;
-
-
-
-
-
-  /*
-    let nextId = 100;
-  const [categories, setCategories] = useState([
-    { id: 1, name: '개발', parentId: null, order: 1 },
-    { id: 2, name: 'React', parentId: 1, order: 1 },
-    { id: 3, name: 'Vue', parentId: 1, order: 2 },
-    { id: 4, name: '일상', parentId: null, order: 2 },
-  ]);
-  const [form, setForm] = useState({ name: '', parentId: '', order: 1 });
-
-  const handleEdit = (cat) => {
-    setEditingId(cat.id);
-    setForm({
-      name: cat.name,
-      parentId: cat.parentId ?? '',
-      order: cat.order,
-    });
-  };
-
-  const handleSave = () => {
-    setCategories((prev) =>
-      prev.map((c) =>
-        c.id === editingId
-          ? {
-              ...c,
-              name: form.name,
-              parentId: form.parentId === '' ? null : Number(form.parentId),
-              order: Number(form.order),
-            }
-          : c
-      )
-    );
-    setEditingId(null);
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm('정말 삭제하시겠습니까?')) {
-      setCategories((prev) => prev.filter((c) => c.id !== id && c.parentId !== id));
-    }
-  };
-
-  const handleAdd = () => {
-    if (!form.name.trim()) return alert('이름을 입력하세요');
-
-    const newCat = {
-      id: nextId++,
-      name: form.name,
-      parentId: form.parentId === '' ? null : Number(form.parentId),
-      order: Number(form.order),
-    };
-
-    setCategories((prev) => [...prev, newCat]);
-    setForm({ name: '', parentId: '', order: 1 });
-    setIsAdding(false);
-  };
-
-  const renderCategoryRow = (cat) => {
-    const isEditing = editingId === cat.id;
-
-    return (
-      <div key={cat.id} className={`category-row ${cat.parentId ? 'child' : 'parent'}`}>
-        {isEditing ? (
-          <>
-            <input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
-            <select
-              value={form.parentId}
-              onChange={(e) => setForm({ ...form, parentId: e.target.value })}
-            >
-              <option value="">(상위 없음)</option>
-              {categories
-                .filter((c) => c.parentId === null && c.id !== cat.id)
-                .map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
-                  </option>
-                ))}
-            </select>
-            <input
-              type="number"
-              value={form.order}
-              onChange={(e) => setForm({ ...form, order: e.target.value })}
-              style={{ width: 60 }}
-            />
-            <button onClick={handleSave}>저장</button>
-            <button onClick={() => setEditingId(null)}>취소</button>
-          </>
-        ) : (
-          <>
-            <span>{cat.name}</span>
-            <span>{cat.parentId ? `(하위)` : `(상위)`}</span>
-            <span>순서: {cat.order}</span>
-            <button onClick={() => handleEdit(cat)}>수정</button>
-            <button onClick={() => handleDelete(cat.id)}>삭제</button>
-          </>
-        )}
-      </div>
-    );
-  };
-
-  const renderCategoryList = () => {
-    const sorted = [...categories].sort((a, b) =>
-      a.parentId === b.parentId
-        ? a.order - b.order
-        : a.parentId === null
-        ? -1
-        : 1
-    );
-
-    return sorted.map(renderCategoryRow);
-  };
-
-  const renderAddForm = () => (
-    <div className="category-row add-form">
-      <input
-        placeholder="카테고리명"
-        value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-      />
-      <select
-        value={form.parentId}
-        onChange={(e) => setForm({ ...form, parentId: e.target.value })}
-      >
-        <option value="">(상위 없음)</option>
-        {categories
-          .filter((c) => c.parentId === null)
-          .map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
-          ))}
-      </select>
-      <input
-        type="number"
-        value={form.order}
-        onChange={(e) => setForm({ ...form, order: e.target.value })}
-        style={{ width: 60 }}
-      />
-      <button onClick={handleAdd}>추가</button>
-      <button onClick={() => setIsAdding(false)}>취소</button>
-    </div>
-  );
-
-  return (
-    <div className="category-manager">
-      <h2>카테고리 관리</h2>
-      <button className="add-toggle-btn" onClick={() => setIsAdding(true)}>
-        + 카테고리 추가
-      </button>
-
-      {isAdding && renderAddForm()}
-      {renderCategoryList()}
-    </div>
-  );
-}
-  */
-
-
