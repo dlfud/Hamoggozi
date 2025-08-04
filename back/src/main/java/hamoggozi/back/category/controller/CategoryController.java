@@ -178,7 +178,7 @@ public class CategoryController {
                 for(CategoryBean parentCategory : categoryList){
                     parentCategory.setUserUid(uid);
                     categoryService.updateOrder(parentCategory);
-                    for(CategoryBean childCategory : categoryList){
+                    for(CategoryBean childCategory : parentCategory.getCategoryList()){
                         childCategory.setUserUid(uid);
                         categoryService.updateOrder(childCategory);
                     }
