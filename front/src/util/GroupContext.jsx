@@ -6,12 +6,14 @@ export const GroupProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState();
   const [groupList, setGroupList] = useState([]); 
   const [groupInfo, setGroupInfo] = useState(null); 
+  const [categoryList, setCategoryList] = useState([]);
 
   return (
     <GroupContext.Provider value={{
       userInfo, setUserInfo,
       groupList, setGroupList,
-      groupInfo, setGroupInfo
+      groupInfo, setGroupInfo,
+      categoryList, setCategoryList
     }}>
       {children}
     </GroupContext.Provider>

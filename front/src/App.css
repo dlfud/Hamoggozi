@@ -252,11 +252,30 @@
 .menu{
   width: 300px;
   height: auto;
-  border: 2px solid #D47E22;
-  border-radius: 8px;
   overflow: hidden;
   margin: 10px auto;
 }
+
+.parentCategory{
+  border-bottom :1px solid #D47E22;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.childCategory{
+  margin-left: 25px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.childCategory:last-child{
+  margin-bottom: 10px;
+}
+
+.parentCategory:hover, .childCategory:hover{
+  background-color: #ffffff80;
+}
+
 
 .menu li {
   border-bottom: 1px solid #eee;
@@ -331,19 +350,14 @@
   cursor: pointer;
 }
 
-.rowCountSelect{
-  width: 85px;
-  height: 40px;
-  border: 1px solid #D47E22;
-  background-color: #ffffff80;
-  border-radius: 30px;
-  margin-left: auto;
-}
-
 .postMenu{
   width: 840px;
-  height: 30px;
+  height: 40px;
+  background-color: #FAEAD3;
   margin: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .postMenuBtn{
@@ -353,6 +367,14 @@
   border-radius: 10px;
   background-color: #fff;
   padding: 0 10px;
+}
+
+.rowCountSelect{
+  width: 85px;
+  height: 40px;
+  border: 1px solid #D47E22;
+  background-color: #ffffff80;
+  border-radius: 30px;
 }
 
 .postDiv{

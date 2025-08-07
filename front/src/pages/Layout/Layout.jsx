@@ -6,12 +6,33 @@ import { useGroup } from '../../util/GroupContext';
 import { useNavigate, useParams } from "react-router-dom";
 
 const Layout = () => {
-  const { userInfo, setUserInfo, groupList, setGroupList, groupInfo, setGroupInfo } = useGroup();    
+  const { userInfo, setUserInfo, groupList, setGroupList, groupInfo, setGroupInfo, categoryList, setCategoryList } = useGroup();    
   const { groupUid } = useParams();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const getCategoryList = async () => {
+      try {
+        const res = await axios.post("/setting/category/getCategoryList", {groupUid: groupUid});
+        if(res.data.status === 'success') {
+            setCategoryList(res.data.list)
+        }else{
+            alert(res.data.message);
+        }
+      } catch (err) {
+          console.error("데이터 가져오기 실패", err);
+      }
+    }
+
+    getCategoryList()
+  }, [])
+
   const goGroup = (groupUid) => {
     navigate(routes.main(groupUid))
+  }
+
+  const goSetting = () => {
+    navigate(routes.profile(groupUid))
   }
   
   const handleLogout = () => {
@@ -55,7 +76,19 @@ const Layout = () => {
         <div className='main'>
           <div className='left'>
             <div className='calendar'>달력</div>
-            <div className='menu'>메뉴</div>
+            <div className='menu'>
+              {categoryList.map((parent) => (
+                <div key={parent.uid}>
+                  <div className='parentCategory'>{parent.name}</div>
+                  {parent.categoryList.map((child) => (
+                    <div key={child.uid} className='childCategory'>{child.name}</div>
+                  ))}
+                </div>
+              ))}
+              <div>
+                <div className='parentCategory' onClick={() => goSetting()}>Setting</div>
+              </div>
+            </div>
           </div>
 
           <div className='right'>

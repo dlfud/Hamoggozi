@@ -8,7 +8,8 @@ public class PostBean extends ParamBean {
     private int userUid;
     private String title;
     private String content;
-    private String category;
+    private String category1Uid;
+    private String category2Uid;
 
     private String userName;
 
@@ -51,11 +52,18 @@ public class PostBean extends ParamBean {
         this.content = content;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCategory1Uid() {
+        return category1Uid;
     }
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategory1Uid(String category1Uid) {
+        this.category1Uid = category1Uid;
+    }
+
+    public String getCategory2Uid() {
+        return category2Uid;
+    }
+    public void setCategory2Uid(String category2Uid) {
+        this.category2Uid = category2Uid;
     }
 
     public String getUserName() {

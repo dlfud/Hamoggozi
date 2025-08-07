@@ -12,6 +12,6 @@ export const routes = {
   createGroup: () => `/createGroup`,
 
   // setting
-  profile: (groupUid) => ``,
+  profile: (groupUid) => `/group/${groupUid}/setting`,
   category: (groupUid) => `/group/${groupUid}/setting/category`,
 };
