@@ -201,6 +201,11 @@ button {
   width: 100%
 }
 
+/*height percent*/
+.h100p{
+  height: 100%;
+}
+
 /*width picxel*/
 .w60{
   width: 60px;

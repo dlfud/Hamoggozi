@@ -11,27 +11,44 @@ import { MyCustomUploadAdapterPlugin, extractTempImages
         , uploadedTempImages, deleteTempImages, 
         extractImages} from '../../util/UploadPostFileUtil';
 
-const UpdatePost = ({ defaultCategory = 'ALL' }) => {
-  const { userInfo, groupInfo } = useGroup();    
+const UpdatePost = () => {
+  const { userInfo, groupInfo, categoryList } = useGroup();    
   const { groupUid, postUid } = useParams();
+
   const [postData, setPostData] = useState({})
+
   const [category, setCategory] = useState()
+  const [subCategory, setSubCategory] = useState()
+
   const [title, setTitle] = useState()
   const [content, setContent] = useState()
   const [initialImages, setInitialImages] = useState([])
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-      setCategory(defaultCategory);
-  }, [defaultCategory]);
+  const changeCategorySelect = (e) => {
+    const selected = e.target.value;
+    setCategory(Number(selected));
+
+    const parent = categoryList.find(p => p.uid === selected);
+
+    if (parent && parent.categoryList.length > 0) {
+      setSubCategory(parent.categoryList[0].uid); 
+    } else {
+      setSubCategory("0");
+    }
+  }
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.post("/post/getPostDetail", {uid: postUid, groupUid: groupInfo.uid});
+        const res = await axios.post("/post/getPostDetail", {uid: postUid, groupUid: groupUid});
         if(res.data.status === 'success'){
           const convertedContent = marked(res.data.result.content);
           setPostData({ ...res.data.result, content: convertedContent });
+
+          setCategory(Number(res.data.result.category1Uid))
+          setSubCategory(Number(res.data.result.category2Uid))
 
           const imgTags = extractImages(convertedContent);
           setInitialImages(imgTags);
@@ -49,7 +66,6 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
 
   useEffect(() => {
     setTitle(postData.title)
-    setCategory(postData.category)
     setContent(postData.content)
   }, [postData])
 
@@ -69,7 +85,7 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
         }
       });
 
-      const res = await axios.post("/post/updatePost", {uid: postUid, groupUid: groupInfo.uid, category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: tempImagesToDelete, deleteFile: imagesToDelete});
+      const res = await axios.post("/post/updatePost", {uid: postUid, groupUid: groupInfo.uid, category1Uid: Number(category), category2Uid: Number(subCategory), title: title, content: content, moveFile: imagesToMove, tempDeleteFile: tempImagesToDelete, deleteFile: imagesToDelete});
       if(res.data.status === 'success'){
         uploadedTempImages.clear();
         navigate(routes.main(groupInfo.uid));
@@ -96,27 +112,53 @@ const UpdatePost = ({ defaultCategory = 'ALL' }) => {
 
   return (
     <div>
-      <h2>상세 페이지</h2>
-      <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        <option value="ALL">All</option>
-        <option value="TEST">test</option>
-      </select>
-      <CKEditor
-        editor={ClassicEditor}
-        data={content}
-        config={{
-            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
-            removePlugins: ['MediaEmbed', 'HtmlEmbed', 'Iframe'],
-            extraPlugins: [MyCustomUploadAdapterPlugin] 
-        }}
-        onChange={(event, editor) => {
-            setContent(editor.getData());
-        }}
-      />
-      <button onClick={updatePost}>수정하기</button>
-      <button onClick={cancelUpdatePost}>취소</button>
-      <p>UID: {postUid}</p>
+      <div className="menuBtns">
+        <div></div>
+        <div>
+          <button className="postMenuBtn mr10" onClick={updatePost}>수정하기</button>
+          <button className="postMenuBtn" onClick={cancelUpdatePost}>취소</button>
+        </div>
+      </div>
+
+      <div className="updateTitle">
+        <p>Title</p>
+        <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+      </div>
+
+      <div className="selectCategories">
+        <div className="selectCategory">
+          <p className="mr10">Category</p>
+          <select className="search mr10" value={category} onChange={(e) => changeCategorySelect(e)}>
+            {categoryList.map((parent) => (
+              <option key={parent.uid} value={parent.uid}>{parent.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="selectCategory">
+          <p className="mr10">Sub Category</p>
+          <select className="search mr10" value={subCategory} onChange={(e) => setSubCategory(e.target.value)}>
+            <option value="0">-</option>
+            {(categoryList.find(p => p.uid === category)?.categoryList || []).map((child) => (
+              <option key={child.uid} value={child.uid}>{child.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="updateContent">
+        <CKEditor
+          editor={ClassicEditor}
+          data={content}
+          config={{
+              toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
+              removePlugins: ['MediaEmbed', 'HtmlEmbed', 'Iframe'],
+              extraPlugins: [MyCustomUploadAdapterPlugin] 
+          }}
+          onChange={(event, editor) => {
+              setContent(editor.getData());
+          }}
+        />
+      </div>
     </div>
   );
 };

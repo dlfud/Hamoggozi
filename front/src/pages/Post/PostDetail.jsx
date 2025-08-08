@@ -6,7 +6,7 @@ import { useGroup } from '../../util/GroupContext';
 import { useNavigate, useParams } from "react-router-dom";
 
 const PostDetail = () => {
-  const { userInfo, groupInfo } = useGroup();    
+  const { userInfo, groupInfo, categoryList } = useGroup();    
   const { groupUid, postUid } = useParams();
   const [postData, setPostData] = useState({})
   const [markdown, setMarkdown] = useState('');
@@ -57,15 +57,21 @@ const PostDetail = () => {
 
   return (
     <div>
-      <h2>상세 페이지</h2>
-      <button onClick={goPostList}>목록으로</button>
-      <button onClick={deletePost}>삭제</button>
-      <button onClick={updatePost}>수정하기</button>
-      <p>UID: {postUid}</p>
-      <p>TITLE: {postData.title}</p>
-      <p>CONTENT: </p><ReactMarkdown>{postData.content}</ReactMarkdown>
-      <p>userName: {postData.userName}</p>
-      <p>updateDate: {postData.updateDate}</p>
+      <div className="menuBtns">
+        <button className="postMenuBtn" onClick={goPostList}>목록으로</button>
+        <div>
+          <button className="postMenuBtn mr10" onClick={deletePost}>삭제</button>
+          <button className="postMenuBtn" onClick={updatePost}>수정</button>
+        </div>
+      </div>
+      <div className="postDetailHeader">
+        <div className="postDetailTitle">{postData.title}</div>
+        <div className="postDetailInfo">
+          <p>작성자: {postData.userName}</p>
+          <p>작성일: {postData.updateDate}</p>
+        </div>
+      </div>
+      <div className="postDetailContent"><ReactMarkdown>{postData.content}</ReactMarkdown></div>
     </div>
   );
 };

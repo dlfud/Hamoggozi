@@ -8,8 +8,8 @@ const Main = () => {
   const { userInfo, groupInfo, categoryList } = useGroup();    
   const { groupUid } = useParams();
 
-  const [category, setCategory] = useState('All')
-  const [subCategory, setSubCategory] = useState('-')
+  const [category, setCategory] = useState(0)
+  const [subCategory, setSubCategory] = useState(0)
 
   const [isSettingNotice, setIsSettingNotice] = useState(false)
   const [isEditingNotice, setIsEditingNotice] = useState(false);
@@ -47,7 +47,7 @@ const Main = () => {
     if (parent && parent.categoryList.length > 0) {
       setSubCategory(parent.categoryList[0].uid); 
     } else {
-      setSubCategory("-");
+      setSubCategory("0");
     }
   }
 
@@ -91,13 +91,13 @@ const Main = () => {
     if(!groupInfo) return
 
     getPostList(1);
-  }, [searchCount]);
+  }, [searchCount, category, subCategory]);
 
   const getPostList = async (page) => {
     try {
       setCurrentPage(page)
       let offset = (page - 1) * searchCount
-      const res = await axios.post("/post/getPostList", {userUid: userInfo.uid, groupUid: groupInfo.uid, category1Uid: category, category2Uid: subCategory, searchWord: searchWord, searchCount: searchCount, offset: offset});
+      const res = await axios.post("/post/getPostList", {userUid: userInfo.uid, groupUid: groupInfo.uid, category1Uid: Number(category), category2Uid: Number(subCategory), searchWord: searchWord, searchCount: searchCount, offset: offset});
       setPostList(res.data.postList);
       setTotalCount(res.data.totalCnt)
     } catch (err) {
@@ -194,7 +194,8 @@ const Main = () => {
           <colgroup>
             <col style={{ width: '10%' }} />
             <col style={{ width: '30%' }} />
-            <col style={{ width: '30%' }} />
+            <col style={{ width: '15%' }} />
+            <col style={{ width: '15%' }} />
             <col style={{ width: '30%' }} />
           </colgroup>
           <thead>
@@ -202,18 +203,27 @@ const Main = () => {
               <th>UID</th>
               <th>제목</th>
               <th>category</th>
+              <th>subCategory</th>
               <th>updateTime</th>
             </tr>
           </thead>
           <tbody>
-            {postList.map(item => (
-              <tr key={item.uid}>
-                <td className="textCenter">{item.uid}</td>
-                <td className="cursorPointer" onClick={() => goPostDetail(item.uid)}>{item.title}</td>
-                <td className="textCenter">{item.category}</td>
-                <td className="textCenter">{item.updateDate}</td>
-              </tr>
-            ))}
+            {postList.map(item => {
+              let c = categoryList.find(cat => cat.uid === Number(item.category1Uid))
+              let sc
+              if(c.categoryList.length !== 0){
+                sc = c.categoryList.find(cat => cat.uid === Number(item.category2Uid))
+              }
+              return (
+                <tr key={item.uid}>
+                  <td className="textCenter">{item.uid}</td>
+                  <td className="cursorPointer" onClick={() => goPostDetail(item.uid)}>{item.title}</td>
+                  <td className="textCenter">{c.name}</td>
+                  <td className="textCenter">{sc?.name}</td>
+                  <td className="textCenter">{item.updateDate}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

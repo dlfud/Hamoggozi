@@ -399,6 +399,70 @@
   font-size: 18px;
 }
 
+/*postDetail*/
+.menuBtns{
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.postDetailHeader{
+  border-bottom: 1px solid #D47E22;
+  background-color: #ffffff80;
+  margin: 10px;
+}
+.postDetailTitle{
+  padding: 10px 15px;
+}
+.postDetailInfo{
+  padding: 10px;
+  font-size: 14px;
+  display: flex;
+  justify-content: end;
+}
+.postDetailInfo p{
+  margin-right: 10px;
+  color: #646464
+}
+.postDetailContent{
+  border: 1px solid #D47E22;
+  padding: 10px 15px;
+  margin: 10px;
+  background-color: #ffffff80;
+  min-height: 500px;
+}
+
+/*postUpdate*/
+.updateTitle{
+  margin: 10px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+}
+.updateTitle p{
+  width:8%
+}
+.updateTitle input{
+  width:92%;
+  background-color: #ffffff80;
+}
+.selectCategories{
+  display: flex;
+  margin: 0 10px 10px 10px;
+}
+.selectCategory{
+  margin: 0 10px;
+  display:flex;
+  align-items: center;
+}
+
+.updateContent {
+  margin: 0 10px;
+}
+
+.updateContent .ck-editor__editable {
+  min-height: 460px !important;
+}
+
 
 /*setting category*/
 .category-manager {
