@@ -92,47 +92,53 @@ public class PostController {
     public ResponseEntity<Map<String, String>> insertPost(@RequestHeader("Authorization") String authHeader, @RequestBody PostBean postBean) throws Exception {
         Map<String, String> resultMap = new HashMap<>();
 
-        String token = authHeader.replace("Bearer ", "");
-        Claims claims = jwtUtil.parseToken(token);
-        int uid = claims.get("uid", Integer.class);
-
-        int resultPost = generalService.checkGroupUser(postBean.getGroupUid(), uid);
-
-        if(resultPost > 0) {
-            postBean.setUserUid(uid);
-            postBean.setInsertBy(uid);
-            postBean.setUpdateBy(uid);
-
-            //임시폴더 영구폴더로 이동 및 내용 url치환
-            for (String fileUrl : postBean.getMoveFile()) {
-                String moveUrl = fileUtil.moveFile(fileUrl);
-                postBean.setContent(postBean.getContent().replaceAll(fileUrl, moveUrl));
-
-                FileBean fileBean = new FileBean();
-                String url = fileUtil.extractFileUrl(moveUrl);
-                fileBean.setFileName(url.split("/")[2].split("_")[1]);
-                fileBean.setPublickey(url.split("/")[2].split("_")[0]);
-                fileBean.setSaveName(url.split("/")[2]);
-                fileBean.setUrl(url);
-                generalService.insertFile(fileBean);
-            }
-            //임시폴더에서 삭제한 이미지 삭제
-            for (String fileUrl : postBean.getTempDeleteFile()) {
-                fileUtil.deleteTempFile(fileUrl);
-            }
-
-            String sanitizedContent = Jsoup.clean(postBean.getContent(), Safelist.basicWithImages());
-            postBean.setContent(sanitizedContent);
-            int result = postService.insertPost(postBean);
-
-            if (result > 0) {
-                resultMap.put("status", "success");
-                resultMap.put("code", "200");
-            }
-        }else{
+        if(postBean.getTitle() == null){
             resultMap.put("code", "200");
             resultMap.put("status", "fail");
-            resultMap.put("message", "그룹에 속하지 않았습니다.");
+            resultMap.put("message", "제목을 입력해 주세요.");
+        }else {
+            String token = authHeader.replace("Bearer ", "");
+            Claims claims = jwtUtil.parseToken(token);
+            int uid = claims.get("uid", Integer.class);
+
+            int resultPost = generalService.checkGroupUser(postBean.getGroupUid(), uid);
+
+            if (resultPost > 0) {
+                postBean.setUserUid(uid);
+                postBean.setInsertBy(uid);
+                postBean.setUpdateBy(uid);
+
+                //임시폴더 영구폴더로 이동 및 내용 url치환
+                for (String fileUrl : postBean.getMoveFile()) {
+                    String moveUrl = fileUtil.moveFile(fileUrl);
+                    postBean.setContent(postBean.getContent().replaceAll(fileUrl, moveUrl));
+
+                    FileBean fileBean = new FileBean();
+                    String url = fileUtil.extractFileUrl(moveUrl);
+                    fileBean.setFileName(url.split("/")[2].split("_")[1]);
+                    fileBean.setPublickey(url.split("/")[2].split("_")[0]);
+                    fileBean.setSaveName(url.split("/")[2]);
+                    fileBean.setUrl(url);
+                    generalService.insertFile(fileBean);
+                }
+                //임시폴더에서 삭제한 이미지 삭제
+                for (String fileUrl : postBean.getTempDeleteFile()) {
+                    fileUtil.deleteTempFile(fileUrl);
+                }
+
+                String sanitizedContent = Jsoup.clean(postBean.getContent(), Safelist.basicWithImages());
+                postBean.setContent(sanitizedContent);
+                int result = postService.insertPost(postBean);
+
+                if (result > 0) {
+                    resultMap.put("status", "success");
+                    resultMap.put("code", "200");
+                }
+            } else {
+                resultMap.put("code", "200");
+                resultMap.put("status", "fail");
+                resultMap.put("message", "그룹에 속하지 않았습니다.");
+            }
         }
         return ResponseEntity.ok().body(resultMap);
     }

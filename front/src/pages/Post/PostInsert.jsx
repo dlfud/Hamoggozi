@@ -8,16 +8,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import { MyCustomUploadAdapterPlugin, extractTempImages
         , uploadedTempImages, deleteTempImages } from '../../util/UploadPostFileUtil';
 
-const InsertPost = ({ defaultCategory = 'ALL' }) => {
-  const { userInfo, groupInfo } = useGroup();    
-  const [category, setCategory] = useState()
+const InsertPost = ({}) => {
+  const { userInfo, groupInfo, categoryList } = useGroup();    
+  const [category, setCategory] = useState(categoryList[0]?.uid)
+  const [subCategory, setSubCategory] = useState()
   const [title, setTitle] = useState()
   const [content, setContent] = useState()
   const navigate = useNavigate();
 
   useEffect(() => {
-      setCategory(defaultCategory);
-  }, [defaultCategory]);
+    if (categoryList.length > 0) {
+      const firstCategoryUid = categoryList[0].uid;
+      setCategory(firstCategoryUid);
+      setSubCategory("0");
+    }
+  }, [categoryList]);
 
   const insertPost = async () => {
     try {
@@ -34,7 +39,7 @@ const InsertPost = ({ defaultCategory = 'ALL' }) => {
         }
       });
 
-      const res = await axios.post("/post/insertPost", {groupUid: groupInfo.uid, category: category, title: title, content: content, moveFile: imagesToMove, tempDeleteFile: imagesToDelete});
+      const res = await axios.post("/post/insertPost", {groupUid: groupInfo.uid, category1Uid: Number(category), category2Uid: Number(subCategory), title: title, content: content, moveFile: imagesToMove, tempDeleteFile: imagesToDelete});
       if(res.data.status === 'success'){
         uploadedTempImages.clear();
         navigate(routes.main(groupInfo.uid))
@@ -57,28 +62,61 @@ const InsertPost = ({ defaultCategory = 'ALL' }) => {
     }
   }
 
+  const changeCategorySelect = (e) => {
+    const selected = Number(e.target.value);
+    setCategory(selected);
+    setSubCategory("0");
+  }
+
   return (
     <div>
-      <h2>글쓰기 페이지</h2>
-      <input type="text" id="title" onChange={(e) => setTitle(e.target.value)}></input>
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        <option value="ALL">All</option>
-        <option value="TEST">test</option>
-      </select>
-      <CKEditor
-          editor={ClassicEditor}
-          data={content}
-          config={{
-              toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
-              removePlugins: ['MediaEmbed', 'HtmlEmbed', 'Iframe'],
-              extraPlugins: [MyCustomUploadAdapterPlugin] 
-          }}
-          onChange={(event, editor) => {
-              setContent(editor.getData());
-          }}
-      />
-      <button onClick={insertPost}>저장하기</button>
-      <button onClick={cancelInsertPost}>취소</button>
+      <div className="menuBtns">
+        <div></div>
+        <div>
+          <button className="postMenuBtn mr10" onClick={insertPost}>저장하기</button>
+          <button className="postMenuBtn" onClick={cancelInsertPost}>취소</button>
+        </div>
+      </div>
+
+      <div className="updateTitle">
+        <p>Title</p>
+        <input type="text" id="title" onChange={(e) => setTitle(e.target.value)}></input>
+      </div>
+
+      <div className="selectCategories">
+        <div className="selectCategory">
+          <p className="mr10">Category</p>
+          <select className="search mr10" value={category} onChange={(e) => changeCategorySelect(e)}>
+            {categoryList.map((parent) => (
+              <option key={parent.uid} value={parent.uid}>{parent.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="selectCategory">
+          <p className="mr10">Sub Category</p>
+          <select className="search mr10" value={subCategory} onChange={(e) => setSubCategory(e.target.value)}>
+            <option value="0">-</option>
+            {(categoryList.find(p => p.uid === category)?.categoryList || []).map((child) => (
+              <option key={child.uid} value={child.uid}>{child.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="updateContent">
+        <CKEditor
+            editor={ClassicEditor}
+            data={content}
+            config={{
+                toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
+                removePlugins: ['MediaEmbed', 'HtmlEmbed', 'Iframe'],
+                extraPlugins: [MyCustomUploadAdapterPlugin] 
+            }}
+            onChange={(event, editor) => {
+                setContent(editor.getData());
+            }}
+        />
+      </div>
     </div>
   );
 };
