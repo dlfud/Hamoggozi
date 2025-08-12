@@ -41,14 +41,7 @@ const Main = () => {
   const changeCategorySelect = (e) => {
     const selected = e.target.value;
     setCategory(Number(selected));
-
-    const parent = categoryList.find(p => p.uid === selected);
-
-    if (parent && parent.categoryList.length > 0) {
-      setSubCategory(parent.categoryList[0].uid); 
-    } else {
-      setSubCategory("0");
-    }
+    setSubCategory("0");
   }
 
   //notice

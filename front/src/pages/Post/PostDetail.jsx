@@ -33,7 +33,7 @@ const PostDetail = () => {
   }
 
   const goPostList = () => {
-    navigate(routes.main(groupUid));
+    navigate(routes.postList(groupUid, postData.category1Uid, postData.category2Uid))
   }
 
   const updatePost = () => {

@@ -262,6 +262,11 @@
   cursor: pointer;
 }
 
+.parentCategory.on{
+  background-color: #ffffff80;
+  color: #D47E22
+}
+
 .childCategory{
   margin-left: 25px;
   padding: 8px 10px;
@@ -270,6 +275,11 @@
 
 .childCategory:last-child{
   margin-bottom: 10px;
+}
+
+.parentCategory.on, .childCategory.on{
+  background-color: #ffffff80;
+  color: #D47E22
 }
 
 .parentCategory:hover, .childCategory:hover{
@@ -381,6 +391,15 @@
   width: 840px;
   height: auto;
   min-height: 270px;
+  margin: 10px 20px;
+  border: 2px solid #D47E22;
+  background: #ffffff80;
+}
+
+.postListDiv{
+  width: 840px;
+  height: auto;
+  min-height: 560px;
   margin: 10px 20px;
   border: 2px solid #D47E22;
   background: #ffffff80;

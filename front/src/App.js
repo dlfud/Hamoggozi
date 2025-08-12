@@ -8,6 +8,7 @@ import GroupProviderWrapper from './pages/Layout/GroupProviderWrapper';
 import GroupList from "./pages/GroupList";
 import CreateGroup from "./pages/CreateGroup";
 import Main from "./pages/Main";
+import PostList from "./pages/Post/PostList";
 import PostDetail from "./pages/Post/PostDetail";
 import PostInsert from "./pages/Post/PostInsert";
 import PostUpdate from "./pages/Post/PostUpdate";
@@ -27,6 +28,7 @@ function App() {
           <Route path="/group/:groupUid" element={<GroupLayout />}>
             <Route element={<Layout />}>
               <Route index element={<Main />} />
+              <Route path="post/postList/:category1Uid/:category2Uid" element={<PostList />}></Route>
               <Route path="post/postDetail/:postUid" element={<PostDetail />} />
               <Route path="post/postInsertPage" element={<PostInsert />} />
               <Route path="post/postUpdatePage/:postUid" element={<PostUpdate />} />

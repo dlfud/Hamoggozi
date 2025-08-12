@@ -7,8 +7,23 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const Layout = () => {
   const { userInfo, setUserInfo, groupList, setGroupList, groupInfo, setGroupInfo, categoryList, setCategoryList } = useGroup();    
-  const { groupUid } = useParams();
+  const { groupUid, category1Uid, category2Uid } = useParams();
+
+  const [selectedCategory, setSelectedCategory] = useState({ parent: null, child: null });
+
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    if (category1Uid) {
+      setSelectedCategory({
+        parent: Number(category1Uid),
+        child: Number(category2Uid) || 0
+      });
+    } else {
+      setSelectedCategory({ parent: null, child: null });
+    }
+  }, [category1Uid, category2Uid]);
 
   useEffect(() => {
     const getCategoryList = async () => {
@@ -29,6 +44,11 @@ const Layout = () => {
 
   const goGroup = (groupUid) => {
     navigate(routes.main(groupUid))
+  }
+
+  const goPostList = (category1Uid, category2Uid) => {
+
+    navigate(routes.postList(groupUid, category1Uid, category2Uid))
   }
 
   const goSetting = () => {
@@ -79,14 +99,14 @@ const Layout = () => {
             <div className='menu'>
               {categoryList.map((parent) => (
                 <div key={parent.uid}>
-                  <div className='parentCategory'>{parent.name}</div>
+                  <div className={`parentCategory ${selectedCategory.parent === parent.uid && selectedCategory.child === 0 ? 'on' : ''}`} onClick={() => goPostList(parent.uid, 0)}>{parent.name}</div>
                   {parent.categoryList.map((child) => (
-                    <div key={child.uid} className='childCategory'>{child.name}</div>
+                    <div key={child.uid} className={`childCategory ${selectedCategory.parent === parent.uid && selectedCategory.child === child.uid ? 'on' : ''}`} onClick={() => goPostList(parent.uid, child.uid)}>{child.name}</div>
                   ))}
                 </div>
               ))}
               <div>
-                <div className='parentCategory' onClick={() => goSetting()}>Setting</div>
+                <div className={`parentCategory ${!category1Uid && window.location.pathname.includes('/setting') ? 'on' : ''}`} onClick={() => goSetting()}>Setting</div>
               </div>
             </div>
           </div>
