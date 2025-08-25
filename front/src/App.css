@@ -494,11 +494,10 @@ h2 {
 }
 
 .add-toggle-btn {
-  background: #007aff;
-  color: white;
-  border: none;
+  border: 1px solid #D47E22;
+  border-radius: 10px;
+  background-color: #fff;
   padding: 8px 12px;
-  border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
   margin-bottom: 20px;

@@ -202,20 +202,22 @@ const Main = () => {
           </thead>
           <tbody>
             {postList.map(item => {
-              let c = categoryList.find(cat => cat.uid === Number(item.category1Uid))
-              let sc
-              if(c.categoryList.length !== 0){
-                sc = c.categoryList.find(cat => cat.uid === Number(item.category2Uid))
+              if(categoryList.length > 0){
+                let c = categoryList.find(cat => cat.uid === Number(item.category1Uid))
+                let sc
+                if(c.categoryList.length !== 0){
+                  sc = c.categoryList.find(cat => cat.uid === Number(item.category2Uid))
+                }
+                return (
+                  <tr key={item.uid}>
+                    <td className="textCenter">{item.uid}</td>
+                    <td className="cursorPointer" onClick={() => goPostDetail(item.uid)}>{item.title}</td>
+                    <td className="textCenter">{c?.name}</td>
+                    <td className="textCenter">{sc?.name}</td>
+                    <td className="textCenter">{item.updateDate}</td>
+                  </tr>
+                )
               }
-              return (
-                <tr key={item.uid}>
-                  <td className="textCenter">{item.uid}</td>
-                  <td className="cursorPointer" onClick={() => goPostDetail(item.uid)}>{item.title}</td>
-                  <td className="textCenter">{c.name}</td>
-                  <td className="textCenter">{sc?.name}</td>
-                  <td className="textCenter">{item.updateDate}</td>
-                </tr>
-              )
             })}
           </tbody>
         </table>

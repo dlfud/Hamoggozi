@@ -40,7 +40,7 @@ const Layout = () => {
     }
 
     getCategoryList()
-  }, [])
+  }, [groupUid])
 
   const goGroup = (groupUid) => {
     navigate(routes.main(groupUid))

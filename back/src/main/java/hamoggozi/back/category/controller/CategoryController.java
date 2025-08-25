@@ -40,15 +40,9 @@ public class CategoryController {
         int checkGroupUser = generalService.checkGroupUser(categoryBean.getGroupUid(), uid);
         if(checkGroupUser > 0){
             String checkAuth = generalService.checkAuth(categoryBean.getGroupUid(), uid);
-            if("MANAGER".equals(checkAuth)){
-                resultMap.put("status", "success");
-                resultMap.put("code", "200");
-                resultMap.put("list", categoryService.getCategoryList(categoryBean));
-            }else{
-                resultMap.put("status", "fail");
-                resultMap.put("code", "200");
-                resultMap.put("massage", "권한이 없습니다.");
-            }
+            resultMap.put("status", "success");
+            resultMap.put("code", "200");
+            resultMap.put("list", categoryService.getCategoryList(categoryBean));
         }else{
             resultMap.put("status", "fail");
             resultMap.put("code", "200");
